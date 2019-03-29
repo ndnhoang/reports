@@ -43,7 +43,7 @@ class LoginController extends Controller
 			return redirect()->route('dashboard');
 		} else {
             $request->session()->flash('msg', "Username or Password is incorrect!");
-            return redirect()->back();
+            return redirect()->back()->withInput();
         }
     }
 

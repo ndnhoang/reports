@@ -19,7 +19,7 @@
 						{{ csrf_field() }}
 						<div class="form-group">
 							<label for="username">Username</label>
-							<input type="text" name="username" id="username" placeholder="Username" class="form-control" required>
+							<input type="text" name="username" id="username" placeholder="Username" class="form-control" value="{{ old('username') }}" required>
 							<div class="invalid-feedback">Username is required</div>
 						</div>
 						<div class="form-group">
@@ -29,11 +29,11 @@
 						</div>
 						<div class="form-group">
 							<div class="custom-control custom-checkbox">
-								<input type="checkbox" class="custom-control-input" id="remember" name="remember">
+								<input type="checkbox" class="custom-control-input" id="remember" name="remember" {{ (old('remember') == 'on') ? 'checked' : '' }}>
 								<label class="custom-control-label" for="remember">Remember me?</label>
 							</div>
 						</div>
-						<button class="btn btn-info btn-block">Login</button>
+						<button type="submit" class="btn btn-info btn-block">Login</button>
 					</form>
 				</div>
 			</div>
