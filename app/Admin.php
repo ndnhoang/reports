@@ -2,11 +2,14 @@
 
 namespace App;
 
-use Illuminate\Foundation\Auth\User as Model;
+use Illuminate\Notifications\Notifiable;
+use Illuminate\Foundation\Auth\User as Authenticatable;
 
-class AdminUser extends Model
+class Admin extends Authenticatable
 {
-	protected $guarded = ['id'];
+    use Notifiable;
+
+    protected $guard = 'admin';
 
     /**
      * The attributes that are mass assignable.
@@ -25,9 +28,4 @@ class AdminUser extends Model
     protected $hidden = [
         'password', 'remember_token',
     ];
-
-    public function getAuthPassword()
-    {
-        return $this->password;
-    }
 }

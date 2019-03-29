@@ -24,4 +24,6 @@ Route::get('/home', 'HomeController@index')->name('home');
 Route::get('/admin', 'Admin\DashboardController@index')->name('dashboard');
 
 Route::get('/admin/login', 'Admin\Auth\LoginController@index')->name('admin.login');
-Route::post('/admin/login', 'Admin\Auth\LoginController@checkLogin')->name('admin.login');
+Route::post('/admin/login', 'Admin\Auth\LoginController@login')->name('admin.login');
+
+Route::get('/admin/logout', 'Admin\Auth\LoginController@logout')->name('admin.logout');

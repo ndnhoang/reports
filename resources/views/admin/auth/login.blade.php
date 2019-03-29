@@ -5,6 +5,11 @@
 <div class="container">
 	<div class="row">
 		<div class="col-md-6 offset-md-3">
+			@if (Session::has('msg'))
+				<div class="alert alert-danger">
+				  	{{ Session::get('msg') }}
+				</div>
+			@endif
 			<form class="needs-validation" method="post" action="{{ route('admin.login') }}" novalidate>
 				{{ csrf_field() }}
 				<div class="form-group">

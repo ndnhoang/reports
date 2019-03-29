@@ -5,13 +5,16 @@ namespace App\Http\Controllers\Admin\Auth;
 use Illuminate\Http\Request;
 use App\Http\Controllers\Controller;
 use Illuminate\Support\Facades\Auth;
+use Illuminate\Foundation\Auth\AuthenticatesUsers;
 use App\AdminUser;
 
 class LoginController extends Controller
 {
-	protected function guard()
+    use AuthenticatesUsers;
+
+	public function __construct()
     {
-        return Auth::guard('admin');
+        $this->middleware('guest')->except('logout');
     }
 
     /**
@@ -21,6 +24,9 @@ class LoginController extends Controller
      */
     public function index()
     {
+        if (Auth::guard('admin')->check()) {
+            return redirect()->route('dashboard');
+        }
         return view('admin.auth.login');
     }
 
@@ -28,15 +34,31 @@ class LoginController extends Controller
     	return 'username';
     }
 
-    public function checkLogin(Request $request) {
+    public function login(Request $request) {
     	$credentials = $request->only($this->username(), 'password');
 
     	$login = $credentials[$this->username()];
+    	
+		if (Auth::guard('admin')->attempt($credentials, $request->filled('remember'))) {
+			return redirect()->route('dashboard');
+		} else {
+            $request->session()->flash('msg', "Username or Password is incorrect!");
+            return redirect()->back();
+        }
+    }
 
-    	if (AdminUser::where($this->username(), $login)->count() > 0) {
-    		if (Auth::attempt($credentials, $request->filled('remember'))) {
-    			return redirect()->intended('admin.dashboard');
-    		}
-    	}
+     /**
+     * Log the user out of the application.
+     *
+     * @param  \Illuminate\Http\Request  $request
+     * @return \Illuminate\Http\Response
+     */
+    public function logout(Request $request)
+    {
+        Auth::guard('admin')->logout();
+
+        $request->session()->invalidate();
+
+        return redirect()->route('admin.login');
     }
 }
