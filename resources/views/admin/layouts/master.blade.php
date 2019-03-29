@@ -35,8 +35,13 @@
         }
         aside {
             background-color: #1F262D;
-            height: calc(100vh - 72px);
             font-size: 18px;
+            position: absolute;
+            left: 15px;
+            right: 15px;
+            height: 100%;
+            top: 0;
+            min-height: calc(100vh - 73px);
         }
         aside .nav-link {
             color: #fff;
@@ -115,9 +120,13 @@
                             </a>
 
                             <div class="dropdown-menu dropdown-menu-right" aria-labelledby="navbarDropdown">
-                                <a class="dropdown-item" href="{{ route('admin.logout') }}">
+                                <a class="dropdown-item" href="{{ route('admin.logout') }}" onclick="event.preventDefault();
+                                                     document.getElementById('logout-form').submit();">
                                     {{ __('Logout') }}
                                 </a>
+                                <form id="logout-form" action="{{ route('admin.logout') }}" method="POST" style="display: none;">
+                                    @csrf
+                                </form>
                             </div>
                         </li>
                      <?php endif ?>
@@ -164,7 +173,7 @@
                 </div>
 
                 {{-- Content --}}
-                <div class="col-md-10 py-4 pl-0 pr-4">
+                <div id="content" class="col-md-10 py-4 pl-0 pr-4">
                     @yield('content')
                 </div>
             </div>

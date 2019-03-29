@@ -71,14 +71,14 @@ class DepartmentController extends Controller
      */
     public function edit($id)
     {
+        $allDepartments = Department::all();
     	$departments = Department::where('parent', 0)->where('id', '!=', $id)->get();
 
         $department = Department::find($id);
-
         if ($department) {
         	return view('admin.department.edit', compact(['id','department', 'departments']));
         } else {
-        	return view('admin.department.index');
+        	return view('admin.department.index')->with('departments', $allDepartments);
         }
     }
 
@@ -100,7 +100,6 @@ class DepartmentController extends Controller
         	$request->session()->flash('success', 'Edit department successful.');
         } else {
         	$request->session()->flash('error', 'Edit department failures!');
-        	return redirect()->back()->withInput();
         }
 
         return redirect()->back()->withInput();
@@ -112,8 +111,25 @@ class DepartmentController extends Controller
      * @param  int  $id
      * @return \Illuminate\Http\Response
      */
-    public function destroy($id)
+    public function destroy(Request $request, $id)
     {
-        //
+        $allDepartments = Department::all();
+
+        $department = Department::find($id);
+
+        $departments = Department::where('id', $id)->orWhere('parent', $id)->get();
+
+        if ($departments) {
+            $plucked = $departments->pluck('id');
+            $plucked_name = $departments->pluck('name');
+
+            if (Department::destroy($plucked->all())) {
+                $request->session()->flash('success', 'Deleted '.count($plucked_name->all()).'  department(s): "'.implode(", ", $plucked_name->all()).'"');
+            } else {
+                $request->session()->flash('error', 'Delete department failures!');
+            }
+        }
+
+        return redirect()->back()->with('departments', $allDepartments);
     }
 }

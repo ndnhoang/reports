@@ -15,7 +15,7 @@
 <?php $count = 0; ?>
 
 @if ($departments)
-<table id="data_table" class="table table-bordered table-striped">
+<table id="data_table" class="table table-bordered table-striped table-hover">
 	<thead>
 		<tr>
 			<th>STT</th>
@@ -33,7 +33,10 @@
 			<td>{{ ($department->parent > 0) ? $department->getDepartmentName($department->parent) : '' }}</td>
 			<td>
 				<a href="{{ route('admin.department.edit', [$department->id]) }}" class="btn btn-success btn-sm">Edit</a>
-				<a href="" class="btn btn-danger btn-sm">Delete</a>
+				<form class="d-inline" method="post" action="{{ route('admin.department.delete', [$department->id]) }}">
+					{{ csrf_field() }}
+					<button type="submit" class="btn btn-danger btn-sm">Delete</button>
+				</form>
 			</td>
 		</tr>
 		@endforeach
