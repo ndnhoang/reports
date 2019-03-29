@@ -1,4 +1,4 @@
-@extends('admin.layouts.master')
+@extends('admin.layouts.login')
 
 @section('content')
 
@@ -10,26 +10,33 @@
 				  	{{ Session::get('msg') }}
 				</div>
 			@endif
-			<form class="needs-validation" method="post" action="{{ route('admin.login') }}" novalidate>
-				{{ csrf_field() }}
-				<div class="form-group">
-					<label for="username">Username</label>
-					<input type="text" name="username" id="username" placeholder="Username" class="form-control" required>
-					<div class="invalid-feedback">Username is required</div>
+			<div class="card">
+				<div class="card-header bg-info text-white">
+					<h4>Login</h4>
 				</div>
-				<div class="form-group">
-					<label for="password">Password</label>
-					<input type="password" name="password" id="password" placeholder="Password" class="form-control" required>
-					<div class="invalid-feedback">Password is required</div>
+				<div class="card-body">
+					<form class="needs-validation" method="post" action="{{ route('admin.login') }}" novalidate>
+						{{ csrf_field() }}
+						<div class="form-group">
+							<label for="username">Username</label>
+							<input type="text" name="username" id="username" placeholder="Username" class="form-control" required>
+							<div class="invalid-feedback">Username is required</div>
+						</div>
+						<div class="form-group">
+							<label for="password">Password</label>
+							<input type="password" name="password" id="password" placeholder="Password" class="form-control" required>
+							<div class="invalid-feedback">Password is required</div>
+						</div>
+						<div class="form-group">
+							<div class="custom-control custom-checkbox">
+								<input type="checkbox" class="custom-control-input" id="remember" name="remember">
+								<label class="custom-control-label" for="remember">Remember me?</label>
+							</div>
+						</div>
+						<button class="btn btn-info btn-block">Login</button>
+					</form>
 				</div>
-				<div class="form-group">
-					<div class="custom-control custom-checkbox">
-						<input type="checkbox" class="custom-control-input" id="remember" name="remember">
-						<label class="custom-control-label" for="remember">Remember me?</label>
-					</div>
-				</div>
-				<button class="btn btn-primary">Login</button>
-			</form>
+			</div>
 		</div>
 	</div>
 </div>
