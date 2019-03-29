@@ -16,6 +16,7 @@ class DepartmentController extends Controller
     public function index()
     {
     	$departments = Department::all();
+
         return view('admin.department.index')->with('departments', $departments);
     }
 
@@ -39,15 +40,19 @@ class DepartmentController extends Controller
      */
     public function store(Request $request)
     {
+        if ($this->checkDepartmentName($request->name)) {
+            $request->session()->flash('error', 'Department already exists!');
+
+            return redirect()->back()->withInput();
+        }
+
         $department = new Department;
         $department->name = $request->name;
         $department->parent = $request->parent;
 
-        if ($department->save()) {
-        	$request->session()->flash('success', 'Add department successful.');
-        } else {
-        	$request->session()->flash('error', 'Add department failures!');
-        }
+        $department->save();
+
+        $request->session()->flash('success', 'Add department successful.');
 
         return redirect()->back()->withInput();
     }
@@ -71,14 +76,17 @@ class DepartmentController extends Controller
      */
     public function edit($id)
     {
-        $allDepartments = Department::all();
-    	$departments = Department::where('parent', 0)->where('id', '!=', $id)->get();
 
         $department = Department::find($id);
+
         if ($department) {
+            $departments = Department::where('parent', 0)->where('id', '!=', $id)->get();
+
         	return view('admin.department.edit', compact(['id','department', 'departments']));
         } else {
-        	return view('admin.department.index')->with('departments', $allDepartments);
+            $allDepartments = Department::all();
+
+        	return redirect()->route('admin.department')->with('departments', $allDepartments);
         }
     }
 
@@ -93,14 +101,18 @@ class DepartmentController extends Controller
     {
         $department = Department::find($id);
 
+        if ($request->name != $department->name && $this->checkDepartmentName($request->name)) {
+            $request->session()->flash('error', 'Department already exists!');
+
+            return redirect()->back()->withInput();
+        }
+
         $department->name = $request->name;
         $department->parent = $request->parent;
 
-        if ($department->save()) {
-        	$request->session()->flash('success', 'Edit department successful.');
-        } else {
-        	$request->session()->flash('error', 'Edit department failures!');
-        }
+        $department->save();
+
+        $request->session()->flash('success', 'Edit department successful.');
 
         return redirect()->back()->withInput();
     }
@@ -115,21 +127,24 @@ class DepartmentController extends Controller
     {
         $allDepartments = Department::all();
 
-        $department = Department::find($id);
-
         $departments = Department::where('id', $id)->orWhere('parent', $id)->get();
 
         if ($departments) {
             $plucked = $departments->pluck('id');
             $plucked_name = $departments->pluck('name');
 
-            if (Department::destroy($plucked->all())) {
-                $request->session()->flash('success', 'Deleted '.count($plucked_name->all()).'  department(s): "'.implode(", ", $plucked_name->all()).'"');
-            } else {
-                $request->session()->flash('error', 'Delete department failures!');
-            }
+            Department::destroy($plucked->all());
+
+            $request->session()->flash('success', 'Deleted '.count($plucked_name->all()).'  department(s): "'.implode(", ", $plucked_name->all()).'"');
         }
 
         return redirect()->back()->with('departments', $allDepartments);
+    }
+
+    public function checkDepartmentName($name)
+    {
+        $department = Department::where('name', $name)->first();
+
+        return $department ? true : false;
     }
 }

@@ -157,14 +157,14 @@
                                 </ul>
                             </li>
                             <li class="nav-item">
-                                <a class="nav-link" href="#">Users</a>
+                                <a class="nav-link" href="{{ route('admin.user') }}">Users</a>
                                 <i class="fas fa-angle-down"></i>
                                 <ul class="children">
                                     <li class="nav-item">
                                         <a href="" class="nav-link">Add new</a>
                                     </li>
                                     <li class="nav-item">
-                                        <a href="" class="nav-link">All users</a>
+                                        <a href="{{ route('admin.user') }}" class="nav-link">All users</a>
                                     </li>
                                 </ul>
                             </li>

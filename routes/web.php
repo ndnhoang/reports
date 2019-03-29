@@ -28,9 +28,22 @@ Route::post('/admin/login', 'Admin\Auth\LoginController@login')->name('admin.log
 
 Route::post('/admin/logout', 'Admin\Auth\LoginController@logout')->name('admin.logout');
 
+/* Department */
+
 Route::get('/admin/department', 'Admin\DepartmentController@index')->name('admin.department');
 Route::get('/admin/department/add', 'Admin\DepartmentController@create')->name('admin.department.add');
 Route::post('/admin/department/add', 'Admin\DepartmentController@store')->name('admin.department.add');
 Route::get('/admin/department/{id}/edit', 'Admin\DepartmentController@edit')->name('admin.department.edit');
 Route::post('/admin/department/{id}/edit', 'Admin\DepartmentController@update')->name('admin.department.edit');
 Route::post('/admin/department/{id}/delete', 'Admin\DepartmentController@destroy')->name('admin.department.delete');
+
+/* User */
+
+Route::get('/admin/user', 'Admin\UserController@index')->name('admin.user');
+Route::get('/admin/user/add', 'Admin\UserController@create')->name('admin.user.add');
+Route::post('/admin/user/add', 'Admin\UserController@store')->name('admin.user.add');
+Route::get('admin/user/{id}/reset-password', 'Admin\UserController@edit')->name('admin.user.reset.password');
+Route::post('admin/user/{id}/reset-password', 'Admin\UserController@update')->name('admin.user.reset.password');
+Route::post('admin/user/{id}/delete', 'Admin\UserController@destroy')->name('admin.user.delete');
+
+Route::post('/admin/user/generate-password', 'Admin\UserController@generatePassword')->name('admin.generate.password');
