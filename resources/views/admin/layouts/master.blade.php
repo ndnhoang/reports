@@ -16,13 +16,18 @@
     <!-- Styles -->
     <!-- Bootstrap CSS -->
     <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css" integrity="sha384-ggOyR0iXCbMQv3Xipma34MD+dH/1fQ784/j6cY/iJTQUOhcWr7x9JvoRxT2MZw1T" crossorigin="anonymous">
+    {{-- Font Awesome --}}
+    <link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.8.1/css/all.css" integrity="sha384-50oBUHEmvpQ+1lW4y57PTFmhCaXp0ML5d60M1M7uH2+nqUivzIebhndOJK28anvf" crossorigin="anonymous">
+    {{-- Data Table CSS --}}
+    <link rel="stylesheet" type="text/css" href="https://cdn.datatables.net/1.10.19/css/dataTables.bootstrap4.min.css">
 
     <!-- Scripts -->
     <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
     <!-- Bootstrap JS -->
     <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/js/bootstrap.min.js" integrity="sha384-JjSmVgyd0p3pXB1rRibZUAYoIIy6OrQ6VrjIEaFf/nJGzIxFDsf4x0xIM+B07jRM" crossorigin="anonymous"></script>
-    {{-- Font Awesome --}}
-    <link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.8.1/css/all.css" integrity="sha384-50oBUHEmvpQ+1lW4y57PTFmhCaXp0ML5d60M1M7uH2+nqUivzIebhndOJK28anvf" crossorigin="anonymous">
+    {{-- Data Table JS --}}
+    <script type="text/javascript" src="https://cdn.datatables.net/1.10.19/js/jquery.dataTables.min.js"></script>
+    <script type="text/javascript" src="https://cdn.datatables.net/1.10.19/js/dataTables.bootstrap4.min.js"></script>
 
     <style type="text/css">
         body {
@@ -128,17 +133,17 @@
                     <aside>
                         <ul class="nav flex-column py-4">
                             <li class="nav-item">
-                                <a class="nav-link {{ (Request::route()->getName() == 'dashboard') ? 'active' : '' }}" href="#">Dashboard</a>
+                                <a class="nav-link {{ (Request::route()->getName() == 'dashboard') ? 'active' : '' }}" href="{{ route('dashboard') }}">Dashboard</a>
                             </li>
                             <li class="nav-item">
-                                <a class="nav-link" href="#">Departments</a>
+                                <a class="nav-link {{ (Request::route()->getName() == 'admin.department' || Request::route()->getName() == 'admin.department.add') ? 'active' : '' }}" href="{{ route('admin.department') }}">Departments</a>
                                 <i class="fas fa-angle-down"></i>
                                 <ul class="children">
                                     <li class="nav-item">
-                                        <a href="" class="nav-link">Add new</a>
+                                        <a href="{{ route('admin.department.add') }}" class="nav-link">Add new</a>
                                     </li>
                                     <li class="nav-item">
-                                        <a href="" class="nav-link">All departments</a>
+                                        <a href="{{ route('admin.department') }}" class="nav-link">All departments</a>
                                     </li>
                                 </ul>
                             </li>
@@ -159,7 +164,7 @@
                 </div>
 
                 {{-- Content --}}
-                <div class="col-md-10 py-4 pl-0">
+                <div class="col-md-10 py-4 pl-0 pr-4">
                     @yield('content')
                 </div>
             </div>

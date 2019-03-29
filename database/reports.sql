@@ -3,7 +3,7 @@
 -- https://www.phpmyadmin.net/
 --
 -- Host: localhost:3306
--- Generation Time: Mar 28, 2019 at 06:00 PM
+-- Generation Time: Mar 29, 2019 at 05:57 PM
 -- Server version: 5.7.22-0ubuntu0.17.10.1
 -- PHP Version: 7.1.17-0ubuntu0.17.10.1
 
@@ -23,10 +23,10 @@ SET time_zone = "+00:00";
 -- --------------------------------------------------------
 
 --
--- Table structure for table `admin_users`
+-- Table structure for table `admins`
 --
 
-CREATE TABLE `admin_users` (
+CREATE TABLE `admins` (
   `id` bigint(20) UNSIGNED NOT NULL,
   `name` varchar(255) COLLATE utf8mb4_unicode_ci NOT NULL,
   `username` varchar(255) COLLATE utf8mb4_unicode_ci NOT NULL,
@@ -37,11 +37,36 @@ CREATE TABLE `admin_users` (
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
 
 --
--- Dumping data for table `admin_users`
+-- Dumping data for table `admins`
 --
 
-INSERT INTO `admin_users` (`id`, `name`, `username`, `password`, `remember_token`, `created_at`, `updated_at`) VALUES
-(1, 'Hoang Nguyen', 'admin', '$2y$10$92IXUNpkjO0rOQ5byMi.Ye4oKoEa3Ro9llC/.og/at2.uheWG/igi', NULL, NULL, NULL);
+INSERT INTO `admins` (`id`, `name`, `username`, `password`, `remember_token`, `created_at`, `updated_at`) VALUES
+(1, 'Admin', 'admin', '$2y$10$TNS.p7nQGebqRzWf.oCYke7yU41.1yJfpArrcRE4wvb7UEmZHx1qy', 'zCImriHZbri48fpCyD2py6LJjbRDNmGg1vlgOun0w9yxhbnnTfgz8Taev2sL', '2019-03-28 22:50:30', '2019-03-28 22:50:30');
+
+-- --------------------------------------------------------
+
+--
+-- Table structure for table `departments`
+--
+
+CREATE TABLE `departments` (
+  `id` bigint(20) UNSIGNED NOT NULL,
+  `name` varchar(255) COLLATE utf8mb4_unicode_ci NOT NULL,
+  `parent` int(11) NOT NULL DEFAULT '0',
+  `created_at` timestamp NULL DEFAULT NULL,
+  `updated_at` timestamp NULL DEFAULT NULL
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
+
+--
+-- Dumping data for table `departments`
+--
+
+INSERT INTO `departments` (`id`, `name`, `parent`, `created_at`, `updated_at`) VALUES
+(1, 'Quỹ đầu tư phát triển và bảo lãnh tín dụng cho DNNVV', 0, '2019-03-29 02:28:05', '2019-03-29 02:28:05'),
+(2, 'Quỹ bảo vệ và phát triển rừng', 0, '2019-03-29 02:42:10', '2019-03-29 02:42:10'),
+(9, 'Quỹ đầu tư phát triển', 1, '2019-03-29 02:49:46', '2019-03-29 02:49:46'),
+(10, 'Quỹ BLTD cho DNNVV', 1, '2019-03-29 02:50:01', '2019-03-29 02:50:01'),
+(11, 'Quỹ phát triển đất', 0, '2019-03-29 02:50:27', '2019-03-29 03:52:59');
 
 -- --------------------------------------------------------
 
@@ -62,7 +87,8 @@ CREATE TABLE `migrations` (
 INSERT INTO `migrations` (`id`, `migration`, `batch`) VALUES
 (1, '2014_10_12_000000_create_users_table', 1),
 (2, '2014_10_12_100000_create_password_resets_table', 1),
-(3, '2019_03_28_095240_create_admin_users_table', 1);
+(3, '2019_03_29_054306_create_admins_table', 1),
+(4, '2019_03_29_084954_create_departments_table', 2);
 
 -- --------------------------------------------------------
 
@@ -71,7 +97,7 @@ INSERT INTO `migrations` (`id`, `migration`, `batch`) VALUES
 --
 
 CREATE TABLE `password_resets` (
-  `email` varchar(255) COLLATE utf8mb4_unicode_ci NOT NULL,
+  `username` varchar(255) COLLATE utf8mb4_unicode_ci NOT NULL,
   `token` varchar(255) COLLATE utf8mb4_unicode_ci NOT NULL,
   `created_at` timestamp NULL DEFAULT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
@@ -85,8 +111,7 @@ CREATE TABLE `password_resets` (
 CREATE TABLE `users` (
   `id` bigint(20) UNSIGNED NOT NULL,
   `name` varchar(255) COLLATE utf8mb4_unicode_ci NOT NULL,
-  `email` varchar(255) COLLATE utf8mb4_unicode_ci NOT NULL,
-  `email_verified_at` timestamp NULL DEFAULT NULL,
+  `username` varchar(255) COLLATE utf8mb4_unicode_ci NOT NULL,
   `password` varchar(255) COLLATE utf8mb4_unicode_ci NOT NULL,
   `remember_token` varchar(100) COLLATE utf8mb4_unicode_ci DEFAULT NULL,
   `created_at` timestamp NULL DEFAULT NULL,
@@ -98,11 +123,17 @@ CREATE TABLE `users` (
 --
 
 --
--- Indexes for table `admin_users`
+-- Indexes for table `admins`
 --
-ALTER TABLE `admin_users`
+ALTER TABLE `admins`
   ADD PRIMARY KEY (`id`),
-  ADD UNIQUE KEY `admin_users_username_unique` (`username`);
+  ADD UNIQUE KEY `admins_username_unique` (`username`);
+
+--
+-- Indexes for table `departments`
+--
+ALTER TABLE `departments`
+  ADD PRIMARY KEY (`id`);
 
 --
 -- Indexes for table `migrations`
@@ -114,29 +145,34 @@ ALTER TABLE `migrations`
 -- Indexes for table `password_resets`
 --
 ALTER TABLE `password_resets`
-  ADD KEY `password_resets_email_index` (`email`);
+  ADD KEY `password_resets_username_index` (`username`);
 
 --
 -- Indexes for table `users`
 --
 ALTER TABLE `users`
   ADD PRIMARY KEY (`id`),
-  ADD UNIQUE KEY `users_email_unique` (`email`);
+  ADD UNIQUE KEY `users_username_unique` (`username`);
 
 --
 -- AUTO_INCREMENT for dumped tables
 --
 
 --
--- AUTO_INCREMENT for table `admin_users`
+-- AUTO_INCREMENT for table `admins`
 --
-ALTER TABLE `admin_users`
+ALTER TABLE `admins`
   MODIFY `id` bigint(20) UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=2;
+--
+-- AUTO_INCREMENT for table `departments`
+--
+ALTER TABLE `departments`
+  MODIFY `id` bigint(20) UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=13;
 --
 -- AUTO_INCREMENT for table `migrations`
 --
 ALTER TABLE `migrations`
-  MODIFY `id` int(10) UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=4;
+  MODIFY `id` int(10) UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=5;
 --
 -- AUTO_INCREMENT for table `users`
 --
