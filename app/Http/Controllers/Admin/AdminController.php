@@ -14,8 +14,10 @@ class AdminController extends Controller
      *
      * @return \Illuminate\Http\Response
      */
-    public function index()
+    public function index(Request $request)
     {
+        auth()->guard('admin')->user()->authorizeRoles(['sadmin']);
+        
         $admins = Admin::all();
 
         return view('admin.admin.index')->with('admins', $admins);
@@ -28,6 +30,8 @@ class AdminController extends Controller
      */
     public function create()
     {
+        auth()->guard('admin')->user()->authorizeRoles(['sadmin']);
+        
         return view('admin.admin.add');
     }
 
@@ -75,6 +79,8 @@ class AdminController extends Controller
      */
     public function edit($id)
     {
+        auth()->guard('admin')->user()->authorizeRoles(['sadmin']);
+        
         $admin = Admin::find($id);
 
         if ($admin) {
