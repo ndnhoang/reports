@@ -30,7 +30,8 @@
 			<td>{{ $user->username }}</td>
 			<td>
 				<a href="{{ route('admin.user.reset.password', [$user->id]) }}" class="btn btn-success btn-sm">Reset Password</a>
-				<form class="d-inline" method="post" action="{{ route('admin.user.delete', [$user->id]) }}">
+				<button type="button" class="btn btn-danger btn-sm btn-delete">Delete</button>
+				<form class="d-none" method="post" action="{{ route('admin.user.delete', [$user->id]) }}">
 					{{ csrf_field() }}
 					<button type="submit" class="btn btn-danger btn-sm">Delete</button>
 				</form>
@@ -44,6 +45,23 @@
 	$(document).ready(function() {
 	    $('#data_table').DataTable();
 	} );
+
+	{{-- Delete confirm alert --}}
+	$('.btn-delete').on('click', function() {
+		var parent = $(this).parent();
+		
+		swal({
+			title: 'Are you sure?',
+			icon: 'warning',
+			buttons: true,
+			dangerMode: true,
+		})
+		.then((willDelete) => {
+			if (willDelete) {
+				parent.find('form').submit();
+			}
+		});
+	});
 </script>
 
 @endsection

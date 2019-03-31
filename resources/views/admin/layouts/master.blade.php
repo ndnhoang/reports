@@ -29,6 +29,9 @@
     <script type="text/javascript" src="https://cdn.datatables.net/1.10.19/js/jquery.dataTables.min.js"></script>
     <script type="text/javascript" src="https://cdn.datatables.net/1.10.19/js/dataTables.bootstrap4.min.js"></script>
 
+    {{-- SweetAlert --}}
+    <script src="https://unpkg.com/sweetalert/dist/sweetalert.min.js"></script>
+
     <style type="text/css">
         body {
             overflow-x: hidden;
@@ -116,7 +119,7 @@
                     <?php if(auth()->guard('admin')->check()): ?>
                         <li class="nav-item dropdown">
                             <a id="navbarDropdown" class="nav-link dropdown-toggle" href="#" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false" v-pre>
-                               <?php echo auth()->guard('admin')->user()->name ?> <span class="caret"></span>
+                               <?php echo auth()->guard('admin')->user()->name ?? auth()->guard('admin')->user()->username ?> <span class="caret"></span>
                             </a>
 
                             <div class="dropdown-menu dropdown-menu-right" aria-labelledby="navbarDropdown">
