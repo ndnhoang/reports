@@ -37,6 +37,17 @@ Route::get('/admin/department/{id}/edit', 'Admin\DepartmentController@edit')->na
 Route::post('/admin/department/{id}/edit', 'Admin\DepartmentController@update')->name('admin.department.edit');
 Route::post('/admin/department/{id}/delete', 'Admin\DepartmentController@destroy')->name('admin.department.delete');
 
+/* Admin */
+
+Route::get('/admin/admin', 'Admin\AdminController@index')->name('admin.admin');
+Route::get('/admin/admin/add', 'Admin\AdminController@create')->name('admin.admin.add');
+Route::post('/admin/admin/add', 'Admin\AdminController@store')->name('admin.admin.add');
+Route::get('/admin/admin/{id}/reset-password', 'Admin\AdminController@edit')->name('admin.admin.reset.password');
+Route::post('/admin/admin/{id}/reset-password', 'Admin\AdminController@update')->name('admin.admin.reset.password');
+Route::post('/admin/admin/{id}/delete', 'Admin\AdminController@destroy')->name('admin.admin.delete');
+
+Route::post('/admin/admin/generate-password', 'Admin\AdminController@generatePassword')->name('admin.admin.generate.password');
+
 /* User */
 
 Route::get('/admin/user', 'Admin\UserController@index')->name('admin.user');
@@ -46,4 +57,4 @@ Route::get('admin/user/{id}/reset-password', 'Admin\UserController@edit')->name(
 Route::post('admin/user/{id}/reset-password', 'Admin\UserController@update')->name('admin.user.reset.password');
 Route::post('admin/user/{id}/delete', 'Admin\UserController@destroy')->name('admin.user.delete');
 
-Route::post('/admin/user/generate-password', 'Admin\UserController@generatePassword')->name('admin.generate.password');
+Route::post('/admin/user/generate-password', 'Admin\UserController@generatePassword')->name('admin.user.generate.password');

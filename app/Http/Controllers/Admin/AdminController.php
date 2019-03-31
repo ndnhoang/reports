@@ -3,11 +3,11 @@
 namespace App\Http\Controllers\Admin;
 
 use Illuminate\Http\Request;
-use App\Http\Controllers\Controller;
-use App\User;
 use Illuminate\Support\Facades\Hash;
+use App\Http\Controllers\Controller;
+use App\Admin;
 
-class UserController extends Controller
+class AdminController extends Controller
 {
     /**
      * Display a listing of the resource.
@@ -16,9 +16,9 @@ class UserController extends Controller
      */
     public function index()
     {
-        $users = User::all();
+        $admins = Admin::all();
 
-        return view('admin.user.index')->with('users', $users);
+        return view('admin.admin.index')->with('admins', $admins);
     }
 
     /**
@@ -28,7 +28,7 @@ class UserController extends Controller
      */
     public function create()
     {
-        return view('admin.user.add');
+        return view('admin.admin.add');
     }
 
     /**
@@ -41,19 +41,18 @@ class UserController extends Controller
     {
         if ($this->checkUsername($request->username)) {
             $request->session()->flash('error', 'Username already exists!');
-
             return redirect()->back()->withInput();
         }
 
-        $user = new User;
+        $admin = new Admin;
 
-        $user->username = $request->username;
-        $user->password = Hash::make($request->password);
+        $admin->username = $request->username;
+        $admin->password = Hash::make($request->password);
 
-        $user->save();
+        $admin->save();
 
-        $request->session()->flash('success', 'Add user successful.');
-
+        $request->session()->flash('success', 'Add admin successful.');
+        
         return redirect()->back()->withInput();
     }
 
@@ -76,16 +75,15 @@ class UserController extends Controller
      */
     public function edit($id)
     {
-        $user = User::find($id);
+        $admin = Admin::find($id);
 
-        if ($user) {
-            return view('admin.user.reset-password', compact(['id','user']));
+        if ($admin) {
+            return view('admin.admin.reset-password', compact(['id', 'admin']));
         } else {
-            $users = User::all();
+            $admins = Admin::all();
 
-            return redirect()->route('admin.user')->with('users', $users);
+            return redirect()->route('admin.admin')->with('admins', $admins);
         }
-
     }
 
     /**
@@ -97,17 +95,17 @@ class UserController extends Controller
      */
     public function update(Request $request, $id)
     {
-        $user = User::find($id);
+        $admin = Admin::find($id);
+        
+        $admin->password = Hash::make($request->password);
 
-        $user->password = Hash::make($request->password);
+        $admin->save();
 
-        $user->save();
+        $request->session()->flash('success', 'Reset password for Admin "'.$admin->username.'" successful.');
 
-        $request->session()->flash('success', 'Reset password for User "'. $user->username .'" successful.');
+        $admins = Admin::all();
 
-        $users = User::all();
-
-        return redirect()->route('admin.user')->with('users', $users);
+        return redirect()->route('admin.admin')->with('admins', $admins);
     }
 
     /**
@@ -118,15 +116,16 @@ class UserController extends Controller
      */
     public function destroy(Request $request, $id)
     {
-        $user = User::find($id);
+        $admin = Admin::find($id);
 
-        $user->delete();
+        $admin->delete();
+        
+        $request->session()->flash('success', 'Delete admin "'.$admin->username.'" successful.');
 
-        $request->session()->flash('success', 'Delete user "'. $user->username .'" successful.');
+        $admins = Admin::all();
 
-        $users = User::all();
-
-        return redirect()->back()->with('users', $users);
+        return redirect()->back()->with('admins', $admins);
+        
     }
 
     public function generatePassword()
@@ -136,8 +135,8 @@ class UserController extends Controller
 
     public function checkUsername($username)
     {
-        $user = User::where('username', $username)->first();
+        $admin = Admin::where('username', $username)->first();
 
-        return $user ? true : false;
+        return $admin ? true : false;
     }
 }
