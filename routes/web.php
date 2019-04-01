@@ -58,3 +58,12 @@ Route::post('admin/user/{id}/reset-password', 'Admin\UserController@update')->na
 Route::post('admin/user/{id}/delete', 'Admin\UserController@destroy')->name('admin.user.delete');
 
 Route::post('/admin/user/generate-password', 'Admin\UserController@generatePassword')->name('admin.user.generate.password');
+
+/* Report Type */
+
+Route::get('/admin/report-type', 'Admin\ReportTypeController@index')->name('admin.report.type');
+Route::get('/admin/report-type/add', 'Admin\ReportTypeController@create')->name('admin.report.type.add');
+Route::post('/admin/report-type/add', 'Admin\ReportTypeController@store')->name('admin.report.type.add');
+Route::get('/admin/report-type/{id}/edit', 'Admin\ReportTypeController@edit')->name('admin.report.type.edit');
+Route::post('/admin/report-type/{id}/edit', 'Admin\ReportTypeController@update')->name('admin.report.type.edit');
+Route::post('/admin/report-type/{id}/delete', 'Admin\ReportTypeController@destroy')->name('admin.report.type.delete');
