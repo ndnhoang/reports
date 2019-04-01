@@ -11,9 +11,11 @@
 			</div>
 		@endif
 		
-		@if (Session::has('error'))
+		@if ($errors->any())
 			<div class="alert alert-danger">
-			  	{{ Session::get('error') }}
+				@foreach ($errors->all() as $error)
+					{{ $error }}<br>
+				@endforeach
 			</div>
 		@endif
 

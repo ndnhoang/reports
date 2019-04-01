@@ -6,6 +6,7 @@ use Illuminate\Http\Request;
 use App\Http\Controllers\Controller;
 use App\User;
 use Illuminate\Support\Facades\Hash;
+use Validator;
 
 class UserController extends Controller
 {
@@ -39,10 +40,21 @@ class UserController extends Controller
      */
     public function store(Request $request)
     {
-        if ($this->checkUsername($request->username)) {
-            $request->session()->flash('error', 'Username already exists!');
+        $rules = ['username' => 'required|unique:users|max:100|regex:/^\S*$/u'];
 
-            return redirect()->back()->withInput();
+        $messages = [
+            'username.required' => 'Username is required!',
+            'username.unique' => 'Username already exists!',
+            'username.max' => 'Username is too long, maximum 100 character!',
+            'username.regex' => 'Username don\'t allow white spaces!',
+        ];
+
+        $validator = Validator::make($request->all(), $rules, $messages);
+        
+        if ($validator->fails()) {
+            
+            return redirect()->back()->withErrors($validator)->withInput();
+            
         }
 
         $user = new User;
@@ -132,12 +144,5 @@ class UserController extends Controller
     public function generatePassword()
     {
         return response()->json(str_random(8));
-    }
-
-    public function checkUsername($username)
-    {
-        $user = User::where('username', $username)->first();
-
-        return $user ? true : false;
     }
 }

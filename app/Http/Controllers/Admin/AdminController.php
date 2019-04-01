@@ -7,6 +7,7 @@ use Illuminate\Support\Facades\Hash;
 use App\Http\Controllers\Controller;
 use App\Admin;
 use App\Role;
+use Validator;
 
 class AdminController extends Controller
 {
@@ -48,9 +49,21 @@ class AdminController extends Controller
     {
         auth()->guard('admin')->user()->authorizeRoles(['sadmin']);
 
-        if ($this->checkUsername($request->username)) {
-            $request->session()->flash('error', 'Username already exists!');
-            return redirect()->back()->withInput();
+        $rules = ['username' => 'required|unique:admins|max:100|regex:/^\S*$/u'];
+
+        $messages = [
+            'username.required' => 'Username is required!',
+            'username.unique' => 'Username already exists!',
+            'username.max' => 'Username is too long, maximum 100 character!',
+            'username.regex' => 'Username don\'t allow white spaces!',
+        ];
+
+        $validator = Validator::make($request->all(), $rules, $messages);
+        
+        if ($validator->fails()) {
+            
+            return redirect()->back()->withErrors($validator)->withInput();
+            
         }
 
         $admin = new Admin;
@@ -148,14 +161,7 @@ class AdminController extends Controller
     public function generatePassword()
     {
         auth()->guard('admin')->user()->authorizeRoles(['sadmin']);
-        
+
         return response()->json(str_random(8));
-    }
-
-    public function checkUsername($username)
-    {
-        $admin = Admin::where('username', $username)->first();
-
-        return $admin ? true : false;
     }
 }
