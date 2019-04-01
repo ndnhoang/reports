@@ -6,6 +6,7 @@ use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Hash;
 use App\Http\Controllers\Controller;
 use App\Admin;
+use App\Role;
 
 class AdminController extends Controller
 {
@@ -31,8 +32,10 @@ class AdminController extends Controller
     public function create()
     {
         auth()->guard('admin')->user()->authorizeRoles(['sadmin']);
+
+        $roles = Role::all();
         
-        return view('admin.admin.add');
+        return view('admin.admin.add')->with('roles', $roles);
     }
 
     /**
@@ -43,6 +46,8 @@ class AdminController extends Controller
      */
     public function store(Request $request)
     {
+        auth()->guard('admin')->user()->authorizeRoles(['sadmin']);
+
         if ($this->checkUsername($request->username)) {
             $request->session()->flash('error', 'Username already exists!');
             return redirect()->back()->withInput();
@@ -54,6 +59,8 @@ class AdminController extends Controller
         $admin->password = Hash::make($request->password);
 
         $admin->save();
+
+        $admin->roles()->attach($request->role);
 
         $request->session()->flash('success', 'Add admin successful.');
         
@@ -101,6 +108,8 @@ class AdminController extends Controller
      */
     public function update(Request $request, $id)
     {
+        auth()->guard('admin')->user()->authorizeRoles(['sadmin']);
+        
         $admin = Admin::find($id);
         
         $admin->password = Hash::make($request->password);
@@ -122,6 +131,8 @@ class AdminController extends Controller
      */
     public function destroy(Request $request, $id)
     {
+        auth()->guard('admin')->user()->authorizeRoles(['sadmin']);
+
         $admin = Admin::find($id);
 
         $admin->delete();
@@ -136,6 +147,8 @@ class AdminController extends Controller
 
     public function generatePassword()
     {
+        auth()->guard('admin')->user()->authorizeRoles(['sadmin']);
+        
         return response()->json(str_random(8));
     }
 

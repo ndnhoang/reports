@@ -19,6 +19,7 @@
 		<tr>
 			<th>No.</th>
 			<th>Username</th>
+			<th>Role</th>
 			<th></th>
 		</tr>
 	</thead>
@@ -28,6 +29,7 @@
 		<tr>
 			<td><?php echo $count; ?></td>
 			<td>{{ $admin->username }}</td>
+			<td>{{ $admin->roles()->first()->description }}</td>
 			<td>
 				<a href="{{ route('admin.admin.reset.password', [$admin->id]) }}" class="btn btn-success btn-sm">Reset Password</a>
 				<button type="button" class="btn btn-danger btn-sm btn-delete">Delete</button>

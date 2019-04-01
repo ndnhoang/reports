@@ -34,6 +34,14 @@
 					<div class="invalid-feedback">Password is required</div>
 				</div>
 			</div>
+			<div class="form-group">
+				<label for="role">Role</label>
+				<select class="custom-select" name="role" id="role">
+				  	@foreach($roles as $role)
+						<option value="{{ $role->id }}">{{ $role->description }}</option>
+				  	@endforeach
+				</select>
+			</div>
 			<button type="submit" class="btn btn-primary">Add</button>
 			<a href="{{ route('admin.admin') }}" class="btn btn-dark float-right">Return to list</a>
 		</form>
