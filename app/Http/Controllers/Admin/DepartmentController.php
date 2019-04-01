@@ -5,6 +5,7 @@ namespace App\Http\Controllers\Admin;
 use Illuminate\Http\Request;
 use App\Http\Controllers\Controller;
 use App\Department;
+use Validator;
 
 class DepartmentController extends Controller
 {
@@ -40,10 +41,19 @@ class DepartmentController extends Controller
      */
     public function store(Request $request)
     {
-        if ($this->checkDepartmentName($request->name)) {
-            $request->session()->flash('error', 'Department already exists!');
+        $rules = ['name' => 'required|unique:departments'];
 
-            return redirect()->back()->withInput();
+        $messages = [
+            'name.required' => 'Department name is required!',
+            'name.unique' => 'Department already exists!',
+        ];
+
+        $validator = Validator::make($request->all(), $rules, $messages);
+        
+        if ($validator->fails()) {
+            
+            return redirect()->back()->withErrors($validator)->withInput();
+            
         }
 
         $department = new Department;
@@ -101,10 +111,19 @@ class DepartmentController extends Controller
     {
         $department = Department::find($id);
 
-        if ($request->name != $department->name && $this->checkDepartmentName($request->name)) {
-            $request->session()->flash('error', 'Department already exists!');
+        $rules = ['name' => 'required|unique:departments'];
 
-            return redirect()->back()->withInput();
+        $messages = [
+            'name.required' => 'Department name is required!',
+            'name.unique' => 'Department already exists!',
+        ];
+
+        $validator = Validator::make($request->all(), $rules, $messages);
+        
+        if ($validator->fails()) {
+            
+            return redirect()->back()->withErrors($validator)->withInput();
+            
         }
 
         $department->name = $request->name;
@@ -139,12 +158,5 @@ class DepartmentController extends Controller
         }
 
         return redirect()->back()->with('departments', $allDepartments);
-    }
-
-    public function checkDepartmentName($name)
-    {
-        $department = Department::where('name', $name)->first();
-
-        return $department ? true : false;
     }
 }
