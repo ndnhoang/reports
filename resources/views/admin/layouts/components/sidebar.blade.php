@@ -51,5 +51,17 @@
                 </li>
             </ul>
         </li>
+        <li class="nav-item">
+            <a class="nav-link {{ (Request::route()->getName() == 'admin.report' || Request::route()->getName() == 'admin.report.add') ? 'active' : '' }}" href="{{ route('admin.report') }}">Reports</a>
+            <i class="fas fa-angle-down"></i>
+            <ul class="children">
+                <li class="nav-item">
+                    <a href="{{ route('admin.report.add') }}" class="nav-link">Add new</a>
+                </li>
+                <li class="nav-item">
+                    <a href="{{ route('admin.report') }}" class="nav-link">All reports</a>
+                </li>
+            </ul>
+        </li>
     </ul>
 </aside>

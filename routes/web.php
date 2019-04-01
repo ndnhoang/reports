@@ -67,3 +67,9 @@ Route::post('/admin/report-type/add', 'Admin\ReportTypeController@store')->name(
 Route::get('/admin/report-type/{id}/edit', 'Admin\ReportTypeController@edit')->name('admin.report.type.edit');
 Route::post('/admin/report-type/{id}/edit', 'Admin\ReportTypeController@update')->name('admin.report.type.edit');
 Route::post('/admin/report-type/{id}/delete', 'Admin\ReportTypeController@destroy')->name('admin.report.type.delete');
+
+/* Report */
+
+Route::get('/admin/report', 'Admin\ReportController@index')->name('admin.report');
+Route::get('/admin/report/add', 'Admin\ReportController@create')->name('admin.report.add');
+Route::post('/admin/report/add', 'Admin\ReportController@store')->name('admin.report.add');
