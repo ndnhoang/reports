@@ -23,7 +23,7 @@
 			{{ csrf_field() }}
 			<div class="form-group">
 				<label for="department_name">Department Name</label>
-				<input type="text" name="name" id="department_name" placeholder="Department Name" class="form-control" value="{{ old('department_name') }}" required>
+				<input type="text" name="name" id="department_name" placeholder="Department Name" class="form-control" value="{{ old('name') }}" required>
 				<div class="invalid-feedback">Department name is required</div>
 			</div>
 			<div class="form-group">

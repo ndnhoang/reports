@@ -11,4 +11,10 @@ class Department extends Model
     	$department = Department::where('id', $id)->first();
     	return ($department) ? $department->name : '';
     }
+    
+    public function users()
+    {
+        return $this->hasMany('App\User');
+    }
+    
 }

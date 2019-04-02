@@ -90,7 +90,18 @@ class ReportController extends Controller
      */
     public function edit($id)
     {
-        //
+        $report = Report::find($id);
+
+        if ($report) {
+            $report_types = ReportType::all();
+
+            return view('admin.report.edit', compact(['id', 'report', 'report_types']));
+        } else {
+            $reports = Report::all();
+            
+            return redirect()->route('admin.report')->with('reports', $reports);
+            
+        }
     }
 
     /**
@@ -102,7 +113,34 @@ class ReportController extends Controller
      */
     public function update(Request $request, $id)
     {
-        //
+        $rules = ['name' => 'required'];
+
+        $messages = [
+            'name.required' => 'Report name is required!',
+        ];
+
+        $validator = Validator::make($request->all(), $rules, $messages);
+
+        if ($validator->fails()) {
+            
+            return redirect()->back()->withErrors($validator)->withInput();
+            
+        }
+
+        $report = Report::find($id);
+
+        $report->name = $request->name;
+        $report->status = ($request->status == 'on') ? true : false;
+
+        $report->save();
+
+        $report_type = ReportType::find($request->type);
+
+        $report_type->reports()->save($report);
+        
+        $request->session()->flash('success', 'Edit report successful.');
+        
+        return redirect()->back()->withInput();
     }
 
     /**
@@ -111,8 +149,17 @@ class ReportController extends Controller
      * @param  int  $id
      * @return \Illuminate\Http\Response
      */
-    public function destroy($id)
-    {
-        //
+    public function destroy(Request $request, $id)
+    {   
+        $report = Report::find($id);
+        
+        $report->delete();
+        
+        $request->session()->flash('success', 'Delete Report "'.$report->name.'" successful.');
+        
+        $reports = Report::all();
+
+        return redirect()->route('admin.report')->with('reports', $reports);
+        
     }
 }

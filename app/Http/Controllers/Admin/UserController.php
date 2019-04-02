@@ -5,6 +5,7 @@ namespace App\Http\Controllers\Admin;
 use Illuminate\Http\Request;
 use App\Http\Controllers\Controller;
 use App\User;
+use App\Department;
 use Illuminate\Support\Facades\Hash;
 use Validator;
 
@@ -29,7 +30,9 @@ class UserController extends Controller
      */
     public function create()
     {
-        return view('admin.user.add');
+        $departments = Department::where('parent', 0)->get();
+
+        return view('admin.user.add')->with('departments', $departments);
     }
 
     /**
@@ -63,6 +66,10 @@ class UserController extends Controller
         $user->password = Hash::make($request->password);
 
         $user->save();
+
+        $department = Department::find($request->department_id);
+
+        $department->users()->save($user);
 
         $request->session()->flash('success', 'Add user successful.');
 
@@ -144,5 +151,35 @@ class UserController extends Controller
     public function generatePassword()
     {
         return response()->json(str_random(8));
+    }
+
+    public function editDepartment($id)
+    {
+        $user = User::find($id);
+        
+        if ($user) {
+            $departments = Department::where('parent', 0)->get();
+
+            return view('admin.user.edit-department', compact(['id', 'user', 'departments']));
+        } else {
+            $users = User::all();
+            
+            return redirect()->route('admin.user')->with('users', $users);
+            
+        }
+    }
+
+    public function updateDepartment(Request $request, $id)
+    {
+        $user = User::find($id);
+
+        $department = Department::find($request->department_id);
+
+        $department->users()->save($user);
+        
+        $request->session()->flash('success', 'Edit user successful.');
+        
+        return redirect()->back()->withInput();
+        
     }
 }

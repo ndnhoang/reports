@@ -19,6 +19,7 @@
 		<tr>
 			<th>No.</th>
 			<th>Username</th>
+			<th>Department</th>
 			<th></th>
 		</tr>
 	</thead>
@@ -28,8 +29,9 @@
 		<tr>
 			<td><?php echo $count; ?></td>
 			<td>{{ $user->username }}</td>
+			<td>{{ ($user->department) ? $user->department->name : '' }}</td>
 			<td>
-				<a href="{{ route('admin.user.reset.password', [$user->id]) }}" class="btn btn-success btn-sm">Reset Password</a>
+				<a href="{{ route('admin.user.edit', [$user->id]) }}" class="btn btn-success btn-sm">Edit</a>
 				<button type="button" class="btn btn-danger btn-sm btn-delete">Delete</button>
 				<form class="d-none" method="post" action="{{ route('admin.user.delete', [$user->id]) }}">
 					{{ csrf_field() }}

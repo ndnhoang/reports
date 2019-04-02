@@ -33,9 +33,9 @@
             <td>{{ $report->report_type->name }}</td>
             <td><input type="checkbox" {{ ($report->status == 1) ? 'checked' : '' }} disabled name="status" id="status" data-toggle="toggle" data-size="sm" data-on="Active" data-off="Inactive" data-onstyle="success" data-offstyle="secondary"></td>
 			<td>
-				<a href="" class="btn btn-success btn-sm">Edit</a>
+				<a href="{{ route('admin.report.edit', ['id' => $report->id]) }}" class="btn btn-success btn-sm">Edit</a>
 				<button type="button" class="btn btn-danger btn-sm btn-delete">Delete</button>
-				<form class="d-none" method="post" action="">
+				<form class="d-none" method="post" action="{{ route('admin.report.delete', ['id' => $report->id]) }}">
 					{{ csrf_field() }}
 					<button type="submit" class="btn btn-danger btn-sm">Delete</button>
 				</form>

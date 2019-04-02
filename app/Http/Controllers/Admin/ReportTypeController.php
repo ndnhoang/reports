@@ -5,6 +5,7 @@ namespace App\Http\Controllers\Admin;
 use Illuminate\Http\Request;
 use App\Http\Controllers\Controller;
 use App\ReportType;
+use Validator;
 
 class ReportTypeController extends Controller
 {
@@ -38,6 +39,20 @@ class ReportTypeController extends Controller
      */
     public function store(Request $request)
     {
+        $rules = ['type_name' => 'required'];
+
+        $messages = [
+            'type_name.required' => 'Type name is required!',
+        ];
+
+        $validator = Validator::make($request->all(), $rules, $messages);
+
+        if ($validator->fails()) {
+            
+            return redirect()->back()->withErrors($validator)->withInput();
+            
+        }
+
         $report_type = new ReportType;
 
         $report_type->name = $request->type_name;
@@ -92,6 +107,20 @@ class ReportTypeController extends Controller
      */
     public function update(Request $request, $id)
     {
+        $rules = ['type_name' => 'required'];
+
+        $messages = [
+            'type_name.required' => 'Type name is required!',
+        ];
+
+        $validator = Validator::make($request->all(), $rules, $messages);
+
+        if ($validator->fails()) {
+            
+            return redirect()->back()->withErrors($validator)->withInput();
+            
+        }
+        
         $report_type = ReportType::find($id);
 
         $report_type->name = $request->type_name;
