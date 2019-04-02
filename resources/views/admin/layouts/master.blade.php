@@ -22,6 +22,16 @@
     {{-- Data Table CSS --}}
     <link rel="stylesheet" type="text/css" href="https://cdn.datatables.net/1.10.19/css/dataTables.bootstrap4.min.css">
 
+    {{-- Propeller icons --}}
+    <link rel="stylesheet" type="text/css" href="http://fonts.googleapis.com/icon?family=Material+Icons">
+    <link rel="stylesheet" type="text/css" href="http://propeller.in/components/icons/css/google-icons.css">
+
+    {{-- Bootstrap datetimepicker --}}
+    <link rel="stylesheet" type="text/css" href="http://propeller.in/components/datetimepicker/css/bootstrap-datetimepicker.css">
+
+    {{-- Propeller datetimepicker --}}
+    <link rel="stylesheet" type="text/css" href="http://propeller.in/components/datetimepicker/css/pmd-datetimepicker.css">
+
     <!-- Scripts -->
     <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
     <!-- Bootstrap JS -->
@@ -30,6 +40,12 @@
     {{-- Data Table JS --}}
     <script type="text/javascript" src="https://cdn.datatables.net/1.10.19/js/jquery.dataTables.min.js"></script>
     <script type="text/javascript" src="https://cdn.datatables.net/1.10.19/js/dataTables.bootstrap4.min.js"></script>
+
+    <!-- Datepicker moment with locales -->
+    <script type="text/javascript" language="javascript" src="http://propeller.in/components/datetimepicker/js/moment-with-locales.js"></script>
+
+    <!-- Propeller Bootstrap datetimepicker -->
+    <script type="text/javascript" language="javascript" src="http://propeller.in/components/datetimepicker/js/bootstrap-datetimepicker.js"></script>
 
     {{-- SweetAlert --}}
     <script src="https://unpkg.com/sweetalert/dist/sweetalert.min.js"></script>
@@ -154,5 +170,16 @@
             </div>
         </main>
     </div>
+    <script>
+        // View mode datepicker [shows only years and month]
+        $('.datepicker-view-mode').datetimepicker({
+            viewMode: 'years',
+            format: 'YYYY'
+        });
+        $('.datepicker-view-mode-month').datetimepicker({
+            viewMode: 'years',
+            format: 'MM/YYYY'
+        });
+    </script>
 </body>
 </html>

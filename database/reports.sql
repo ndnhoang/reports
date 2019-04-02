@@ -3,7 +3,7 @@
 -- https://www.phpmyadmin.net/
 --
 -- Host: localhost:3306
--- Generation Time: Apr 01, 2019 at 05:53 PM
+-- Generation Time: Apr 02, 2019 at 05:58 PM
 -- Server version: 5.7.22-0ubuntu0.17.10.1
 -- PHP Version: 7.1.17-0ubuntu0.17.10.1
 
@@ -41,8 +41,8 @@ CREATE TABLE `admins` (
 --
 
 INSERT INTO `admins` (`id`, `name`, `username`, `password`, `remember_token`, `created_at`, `updated_at`) VALUES
-(3, 'Super Admin', 'sadmin', '$2y$10$wo57hisK3ci.MbWOdvVTieibrAfFx9Xs9HFHQp1/YPKPjsxWfh29e', NULL, '2019-03-31 10:46:55', '2019-03-31 10:46:55'),
-(4, 'Admin', 'admin', '$2y$10$zEcXVG.qSEz2Gh1I6lHyMuRjahzRMc6raoD0Z0CjuQehYdrWcbx.S', NULL, '2019-03-31 10:46:55', '2019-03-31 10:46:55'),
+(3, 'Super Admin', 'sadmin', '$2y$10$wo57hisK3ci.MbWOdvVTieibrAfFx9Xs9HFHQp1/YPKPjsxWfh29e', 'uDeUtMZBR5dqZMjTgctkvqkS6tKqVFwSXBUDdSZ2RiadoNubzFi0CtVBtf5K', '2019-03-31 10:46:55', '2019-03-31 10:46:55'),
+(4, 'Admin', 'admin', '$2y$10$zEcXVG.qSEz2Gh1I6lHyMuRjahzRMc6raoD0Z0CjuQehYdrWcbx.S', 'OcUYCGk2ceOThfigv6PN0IFIvIRhC1h7rI59XYZqa76kynfdRGGkKtmiprO2', '2019-03-31 10:46:55', '2019-03-31 10:46:55'),
 (5, NULL, 'admin_test', '$2y$10$.1Yxkp1M0sh7InYQ63nLb.bo4fSF/kjc/mvWELqSVaRoJ5cVgccg6', NULL, '2019-03-31 20:38:34', '2019-03-31 20:39:13'),
 (6, NULL, 'sadmin_test', '$2y$10$Noy4uEfU1lAZ0cOkIbiWNOG/D9MDRN9JUDXfH4xvrUAPrS854ZB3i', NULL, '2019-03-31 20:38:50', '2019-03-31 20:38:50');
 
@@ -120,7 +120,8 @@ INSERT INTO `migrations` (`id`, `migration`, `batch`) VALUES
 (12, '2019_03_31_170636_create_roles_table', 4),
 (13, '2019_03_31_174341_create_admin_role_table', 4),
 (15, '2019_04_01_043106_create_reports_table', 5),
-(16, '2019_04_01_042929_create_report_types_table', 6);
+(16, '2019_04_01_042929_create_report_types_table', 6),
+(17, '2019_04_02_044127_add_department_id_to_users', 7);
 
 -- --------------------------------------------------------
 
@@ -154,9 +155,8 @@ CREATE TABLE `reports` (
 --
 
 INSERT INTO `reports` (`id`, `name`, `status`, `type_id`, `created_at`, `updated_at`) VALUES
-(1, 'Tổng hợp các khoản thu các quỹ tài chính ngoài ngân sách do địa phương quản lý', 1, 1, '2019-04-01 03:26:13', '2019-04-01 03:26:13'),
-(2, 'Report 01', 0, 4, '2019-04-01 03:52:18', '2019-04-01 03:52:18'),
-(3, 'Report 02', 1, 5, '2019-04-01 03:52:35', '2019-04-01 03:52:35');
+(1, 'Tổng hợp các khoản thu các quỹ tài chính ngoài ngân sách do địa phương quản lý', 1, 1, '2019-04-01 03:26:13', '2019-04-01 23:58:26'),
+(2, 'Report 01', 0, 4, '2019-04-01 03:52:18', '2019-04-01 03:52:18');
 
 -- --------------------------------------------------------
 
@@ -216,15 +216,18 @@ CREATE TABLE `users` (
   `password` varchar(191) COLLATE utf8mb4_unicode_ci NOT NULL,
   `remember_token` varchar(100) COLLATE utf8mb4_unicode_ci DEFAULT NULL,
   `created_at` timestamp NULL DEFAULT NULL,
-  `updated_at` timestamp NULL DEFAULT NULL
+  `updated_at` timestamp NULL DEFAULT NULL,
+  `department_id` int(11) NOT NULL DEFAULT '0'
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
 
 --
 -- Dumping data for table `users`
 --
 
-INSERT INTO `users` (`id`, `name`, `username`, `password`, `remember_token`, `created_at`, `updated_at`) VALUES
-(2, NULL, 'user1', '$2y$10$46CUsoXX00Ns87jk7KADR.izXJ9rrZQyFJb6VAkzO3l6ZueJrQ5ZG', NULL, '2019-03-31 08:32:23', '2019-03-31 08:58:37');
+INSERT INTO `users` (`id`, `name`, `username`, `password`, `remember_token`, `created_at`, `updated_at`, `department_id`) VALUES
+(2, NULL, 'user1', '$2y$10$p2go5zTdJBwAu1PUA7X.du/yqZSH7GkhepUmeYPlKdM1IWgOK/8LS', NULL, '2019-03-31 08:32:23', '2019-04-01 21:52:55', 1),
+(5, NULL, 'user2', '$2y$10$2RJzb7V3sKnBIeSefI0bOe269zCvfbl4xHZulmWfeu1y5/88h5kMy', NULL, '2019-04-01 21:51:44', '2019-04-01 21:54:07', 8),
+(6, NULL, 'user3', '$2y$10$UQo0joXdevVUAwV5jZLfu.BzfcgIeB.e5zH5g7SuDtLMdvtTSmlV.', NULL, '2019-04-01 21:58:05', '2019-04-01 21:58:05', 4);
 
 --
 -- Indexes for dumped tables
@@ -311,17 +314,17 @@ ALTER TABLE `departments`
 -- AUTO_INCREMENT for table `migrations`
 --
 ALTER TABLE `migrations`
-  MODIFY `id` int(10) UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=17;
+  MODIFY `id` int(10) UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=18;
 --
 -- AUTO_INCREMENT for table `reports`
 --
 ALTER TABLE `reports`
-  MODIFY `id` bigint(20) UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=4;
+  MODIFY `id` bigint(20) UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=5;
 --
 -- AUTO_INCREMENT for table `report_types`
 --
 ALTER TABLE `report_types`
-  MODIFY `id` bigint(20) UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=6;
+  MODIFY `id` bigint(20) UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=7;
 --
 -- AUTO_INCREMENT for table `roles`
 --
@@ -331,7 +334,7 @@ ALTER TABLE `roles`
 -- AUTO_INCREMENT for table `users`
 --
 ALTER TABLE `users`
-  MODIFY `id` bigint(20) UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=5;
+  MODIFY `id` bigint(20) UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=7;
 /*!40101 SET CHARACTER_SET_CLIENT=@OLD_CHARACTER_SET_CLIENT */;
 /*!40101 SET CHARACTER_SET_RESULTS=@OLD_CHARACTER_SET_RESULTS */;
 /*!40101 SET COLLATION_CONNECTION=@OLD_COLLATION_CONNECTION */;
