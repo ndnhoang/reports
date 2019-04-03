@@ -6,7 +6,11 @@ use Illuminate\Http\Request;
 use App\Http\Controllers\Controller;
 use App\Report;
 use App\ReportType;
+use App\Department;
 use Validator;
+use DB;
+use Excel;
+use App\Exports\ReportsExport;
 
 class ReportController extends Controller
 {
@@ -161,5 +165,29 @@ class ReportController extends Controller
 
         return redirect()->route('admin.report')->with('reports', $reports);
         
+    }
+
+    public function showDepartments(Request $request)
+    {
+        if ($request->departments_add) {
+            $ids_ordered = implode(',', $request->departments_add);
+            $departments_add = Department::where('parent', 0)->whereIn('id', $request->departments_add)->orderByRaw(DB::raw("FIELD(id, $ids_ordered)"))->get();
+        } else {
+            $departments_add = [];
+        }
+
+        if ($request->departments_remove) {
+            $departments_remove = Department::where('parent', 0)->whereIn('id', $request->departments_remove)->get();
+        } else {
+            $departments_remove = [];
+        }
+
+        return response()->json(['departments_add' => $departments_add, 'departments_remove' => $departments_remove]);
+        
+    }
+
+    public function export()
+    {
+        return Excel::download(new ReportsExport, 'reports.xlsx');
     }
 }

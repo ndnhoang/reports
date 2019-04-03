@@ -78,3 +78,7 @@ Route::post('/admin/report/add', 'Admin\ReportController@store')->name('admin.re
 Route::get('/admin/report/{id}/edit', 'Admin\ReportController@edit')->name('admin.report.edit');
 Route::post('/admin/report/{id}/edit', 'Admin\ReportController@update')->name('admin.report.edit');
 Route::post('/admin/report/{id}/delete', 'Admin\ReportController@destroy')->name('admin.report.delete');
+
+Route::get('/admin/report/departments', 'Admin\ReportController@showDepartments')->name('admin.report.departments');
+
+Route::get('/admin/report/export', 'Admin\ReportController@export')->name('admin.report.export');

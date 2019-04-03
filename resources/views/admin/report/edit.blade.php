@@ -1,7 +1,12 @@
 @extends('admin.layouts.master')
 
 @section('content')
-<h4>Edit Report</h4>
+<div class="row">
+	<div class="col-md-12">
+		<h4 class="float-left">Edit Report</h4>
+		<a href="{{ route('admin.report.export') }}" class="btn btn-primary float-right">Export</a>
+	</div>
+</div>
 
 <div class="row">
 	<div class="col-md-12 mt-3">
@@ -116,12 +121,22 @@
 						</div>
 						<div class="form-group">
 							<div class="form-row">
-								<div class="col-md-6">
-									<button type="button" class="btn btn-primary" id="add_department">Add department</button>
+								<div class="col-md-12">
+									<div class="input-group select2">
+										<input type="hidden" name="departments_prev" value="">
+										<select name="departments" class="form-control select2-multiple" multiple="multiple">
+												<option value="1">Quỹ đầu tư phát triển và bảo lãnh tín dụng cho DNNVV</option>
+												<option value="4">Quỹ bảo vệ và phát triển rừng</option>
+												<option value="8">Quỹ phát triển đất</option>
+										</select>
+										<div class="input-group-append">
+											<button type="button" class="btn btn-primary" id="add_department">Add department</button>
+										</div>
+									</div>
 								</div>
 							</div>
 						</div>
-						<div id="departments_container"></div>
+						<div id="departments_container" class="py-3"></div>
 					</form>
 				</div>
 			</div>
@@ -148,13 +163,127 @@
     });
   }, false);
 })();
-function addMetaOfDepartment(departmentId) {
-	$html = '<div class="form-group"><div class="form-row"><div class="col-md-6"><input type="text" name="money_source_'+departmentId+'" class="form-control"></div></div></div>';
+function addDepartment(department) {
+	$html = '<div id="department_meta_'+department["id"]+'" class="department-group py-2"><hr>' +
+		'<label>'+department["name"]+'</label>' +
+		'<div class="form-group">' + 
+		'<div class="form-row">' +
+			'<div class="col-md-6">' +
+				'<div class="input-group">' +
+					'<input type="text" name="money_source_'+department["id"]+'[]" class="form-control">' +
+					'<div class="input-group-append">' +
+						'<button class="btn btn-outline-success btn-add" type="button" data-id="'+department["id"]+'"><i class="fas fa-plus"></i></button>' +
+						'<button style="display: none;" class="btn btn-outline-danger btn-remove" type="button" data-id="'+department["id"]+'"><i class="fas fa-minus"></i></button>' +
+					'</div>' +
+				'</div>' +
+			'</div>' +
+		'</div>' +
+		'</div>' +
+	'</div>';
 	return $html;
 }
-$('#add_department').on('click', function() {
-	
+function addMetaOfDepartment(departmentId) {
+	$html = '<div class="form-group">' +
+		'<div class="form-row">' +
+			'<div class="col-md-6">' +
+				'<div class="input-group">' +
+					'<input type="text" name="money_source_'+departmentId+'[]" class="form-control">' +
+					'<div class="input-group-append">' +
+						'<button class="btn btn-outline-success btn-add" type="button" data-id="'+departmentId+'"><i class="fas fa-plus"></i></button>' +
+						'<button class="btn btn-outline-danger btn-remove" type="button" data-id="'+departmentId+'"><i class="fas fa-minus"></i></button>' +
+					'</div>' +
+				'</div>' +
+			'</div>' +
+		'</div>' +
+	'</div>';
+	return $html;
+}
+$(document).on('click', '.btn-add', function() {
+	var id = $(this).attr('data-id');
+	var parent = $(this).parents('.form-group').first();
+	$(addMetaOfDepartment(id)).insertAfter(parent);
+	var parent_group = $(this).parents('.department-group').first();
+	parent_group.find('.btn-remove').show();
 });
+$(document).on('click', '.btn-remove', function() {
+	var parent_group = $(this).parents('.department-group').first();
+	var group = parent_group.find('.form-group');
+	if (group.length <= 2) {
+		parent_group.find('.btn-remove').hide();
+	}
+
+	var id = $(this).attr('data-id');
+	var parent = $(this).parents('.form-group').first();
+	parent.remove();
+});
+$(document).on('click', '.btn-department-remove', function() {
+	var id = $(this).attr('data-id');
+	var parent = $(this).parents('.form-group').first();
+	parent.remove();
+	$('#department_meta_'+id).remove();
+});
+
+$( ".select2-single, .select2-multiple" ).select2( {
+	theme: "bootstrap",
+	placeholder: "Select a State",
+	maximumSelectionSize: 6,
+	containerCssClass: ':all:'
+} );
+$("select[name=departments]").on("select2:select", function (evt) {
+	var element = evt.params.data.element;
+	var $element = $(element);
+	
+	$element.detach();
+	$(this).append($element);
+	$(this).trigger("change");
+});
+$('#add_department').on('click', function() {
+	var departments_prev = $('input[name=departments_prev]').val();
+	var departments = $('select[name=departments]').select2('val');
+	$('input[name=departments_prev]').val(departments);
+	if (departments_prev == '') {
+		departments_prev = [];
+	} else {
+		departments_prev = departments_prev.split(',');
+	}
+	if (departments == '') {
+		departments = [];
+	} 
+	var departments_add = arr_diff(departments_prev, departments);
+	var departments_remove = arr_diff(departments, departments_prev);
+	$.ajax({
+		headers: {
+			'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content'),
+		},
+		type: 'get',
+		url: '/admin/report/departments',
+		data: {departments_add: departments_add, departments_remove: departments_remove},
+		dataType: 'json',
+		success: function(response) {
+			if (response.departments_add.length > 0) {
+				for (var i = 0; i < response.departments_add.length; i++) {
+					$('#departments_container').append(addDepartment(response.departments_add[i]));
+				}
+			}
+			if (response.departments_remove.length > 0) {
+				for (var i = 0; i < response.departments_remove.length; i++) {
+					$('#department_meta_'+response.departments_remove[i]['id']).remove();
+				}
+			}
+		}
+	});
+});
+function arr_diff (a1, a2) {
+
+    var a = []
+
+    for (var i = 0; i < a2.length; i++) {
+        if (a1.indexOf(a2[i]) == -1) {
+			a.push(a2[i]);
+		}
+	}
+	return a;
+}
 </script>
 
 @endsection
