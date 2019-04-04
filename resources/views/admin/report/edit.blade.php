@@ -4,7 +4,7 @@
 <div class="row">
 	<div class="col-md-12">
 		<h4 class="float-left">Edit Report</h4>
-		<a href="{{ route('admin.report.export') }}" class="btn btn-primary float-right">Export</a>
+		<a href="{{ route('admin.report.export', [$id]) }}" class="btn btn-primary float-right">Export</a>
 	</div>
 </div>
 

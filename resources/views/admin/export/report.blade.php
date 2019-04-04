@@ -20,7 +20,7 @@
             <th></th>
             <th></th>
             <th></th>
-            <th colspan="2">Biểu số 03</th>
+            <th colspan="2">{{ $report->report_type->name }}</th>
         </tr>
         <tr>
             <th></th>
@@ -44,9 +44,12 @@
         </tr>
         <tr>
             <th colspan="21">
-                <strong style="font-weight: 700;">TỔNG HỢP CÁC KHOẢN THU CÁC QUỸ TÀI CHÍNH NGOÀI NGÂN SÁCH DO ĐỊA PHƯƠNG QUẢN LÝ GIAI ĐOẠN 2011-2020</strong><br>
+                {{ $name }} GIAI ĐOẠN 2011-2020<br>
                 (Kèm theo công văn số   /UBND-TH ngày     /03/2019 của UBND tỉnh Thừa Thiên Huế)
             </th>
+        </tr>
+        <tr>
+            <th colspan="21">Đơn vị tính: Triệu đồng</th>
         </tr>
         <tr>
             <th rowspan="2">TT</th>

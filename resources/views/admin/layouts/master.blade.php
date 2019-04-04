@@ -115,7 +115,7 @@
         }
         .select2.input-group .input-group-append {
             display: table-cell;
-            width: 140px;
+            width: 150px;
             vertical-align: middle;
         }
     </style>
