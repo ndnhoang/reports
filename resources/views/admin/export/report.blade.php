@@ -1,37 +1,85 @@
-<table class="table table-sm table-hover table-bordered text-right">
-    <thead class="text-center">
+<table>
+    <thead>
         <tr>
-            <th scope="col" rowspan="2" style="width: 40px;">TT</th>
-            <th scope="col" rowspan="2" style="width: 250px;">Nguồn thu của Quỹ</th>
-            <th scope="col" rowspan="2" style="width: 120px;">Chi tiết (tỷ lệ % hoặc mức đóng góp, đối tượng nộp và nội dung nguồn thu của Quỹ)</th>
-            <th scope="col" colspan="2" style="width: 140px;">Năm 2011</th>
-            <th scope="col" colspan="2" style="width: 140px;">Năm 2012</th>
-            <th scope="col" colspan="2" style="width: 140px;">Năm 2013</th>
-            <th scope="col" colspan="2" style="width: 140px;">Năm 2014</th>
-            <th scope="col" colspan="2" style="width: 140px;">Năm 2015</th>
-            <th scope="col" colspan="2" style="width: 140px;">Năm 2016</th>
-            <th scope="col" colspan="2" style="width: 140px;">Năm 2017</th>
-            <th scope="col" colspan="2" style="width: 140px;">Năm 2018</th>
-            <th scope="col" rowspan="2" style="width: 80px;">Kế hoạch 2019</th>
-            <th scope="col" rowspan="2" style="width: 80px;">Kế hoạch 2020</th>
+            <th></th>
+            <th></th>
+            <th></th>
+            <th></th>
+            <th></th>
+            <th></th>
+            <th></th>
+            <th></th>
+            <th></th>
+            <th></th>
+            <th></th>
+            <th></th>
+            <th></th>
+            <th></th>
+            <th></th>
+            <th></th>
+            <th></th>
+            <th></th>
+            <th></th>
+            <th colspan="2">Biểu số 03</th>
         </tr>
         <tr>
-            <th style="width: 70px;">KH</th>
-            <th style="width: 70px;">TH</th>
-            <th style="width: 70px;">KH</th>
-            <th style="width: 70px;">TH</th>
-            <th style="width: 70px;">KH</th>
-            <th style="width: 70px;">TH</th>
-            <th style="width: 70px;">KH</th>
-            <th style="width: 70px;">TH</th>
-            <th style="width: 70px;">KH</th>
-            <th style="width: 70px;">TH</th>
-            <th style="width: 70px;">KH</th>
-            <th style="width: 70px;">TH</th>
-            <th style="width: 70px;">KH</th>
-            <th style="width: 70px;">TH</th>
-            <th style="width: 70px;">KH</th>
-            <th style="width: 70px;">TH</th>
+            <th></th>
+            <th></th>
+            <th></th>
+            <th></th>
+            <th></th>
+            <th></th>
+            <th></th>
+            <th></th>
+            <th></th>
+            <th></th>
+            <th></th>
+            <th></th>
+            <th></th>
+            <th></th>
+            <th></th>
+            <th></th>
+            <th></th>
+            <th colspan="4">(Số liệu tính đến ngày 31/12/2018)</th>
+        </tr>
+        <tr>
+            <th colspan="21">
+                <strong style="font-weight: 700;">TỔNG HỢP CÁC KHOẢN THU CÁC QUỸ TÀI CHÍNH NGOÀI NGÂN SÁCH DO ĐỊA PHƯƠNG QUẢN LÝ GIAI ĐOẠN 2011-2020</strong><br>
+                (Kèm theo công văn số   /UBND-TH ngày     /03/2019 của UBND tỉnh Thừa Thiên Huế)
+            </th>
+        </tr>
+        <tr>
+            <th rowspan="2">TT</th>
+            <th rowspan="2">Nguồn thu của Quỹ</th>
+            <th rowspan="2">Chi tiết (tỷ lệ % hoặc mức đóng góp, đối tượng nộp và nội dung nguồn thu của Quỹ)</th>
+            <th colspan="2">Năm 2011</th>
+            <th colspan="2">Năm 2012</th>
+            <th colspan="2">Năm 2013</th>
+            <th colspan="2">Năm 2014</th>
+            <th colspan="2">Năm 2015</th>
+            <th colspan="2">Năm 2016</th>
+            <th colspan="2">Năm 2017</th>
+            <th colspan="2">Năm 2018</th>
+            <th rowspan="2">Kế hoạch 2019</th>
+            <th rowspan="2">Kế hoạch 2020</th>
+        </tr>
+        <tr>
+            <th>KH</th>
+            <th>TH</th>
+            <th>KH</th>
+            <th>TH</th>
+            <th>KH</th>
+            <th>TH</th>
+            <th>KH</th>
+            <th>TH</th>
+            <th>KH</th>
+            <th>TH</th>
+            <th>KH</th>
+            <th>TH</th>
+            <th>KH</th>
+            <th>TH</th>
+            <th>KH</th>
+            <th>TH</th>
         </tr>
         <tr>
             <th>A</th>
@@ -58,10 +106,9 @@
         </tr>
     </thead>
     <tbody>
-        {{-- department I --}}
         <tr>
-            <th scope="row">I</th>
-            <th class="parent">Qũy đầu tư phát triển và bảo lãnh tín dụng cho DNNVV</th>
+            <th>I</th>
+            <th>Qũy đầu tư phát triển và bảo lãnh tín dụng cho DNNVV</th>
             <th></th>
             <th></th>
             <th></th>
@@ -83,7 +130,7 @@
             <th></th>
         </tr>
         <tr>
-            <td scope="row">1</td>
+            <td>1</td>
             <td>Cho vay</td>
             <td></td>
             <td></td>
@@ -106,7 +153,7 @@
             <td></td>
         </tr>
         <tr>
-            <td scope="row">2</td>
+            <td>2</td>
             <td>Doanh thu</td>
             <td></td>
             <td></td>
@@ -129,7 +176,7 @@
             <td></td>
         </tr>
         <tr>
-            <td scope="3">3</td>
+            <td>3</td>
             <td>Chênh lệch thu chi trước thuế</td>
             <td></td>
             <td></td>
@@ -151,9 +198,8 @@
             <td></td>
             <td></td>
         </tr>
-        {{-- department I.1  --}}
         <tr>
-            <th scope="row">I.1</th>
+            <th>I.1</th>
             <th>Quỹ Đầu tư phát triển (tách ra từ I)</th>
             <th></th>
             <th></th>
@@ -176,7 +222,7 @@
             <th>63.500</th>
         </tr>
         <tr>
-            <td scope="row">1</td>
+            <td>1</td>
             <td>Cho vay</td>
             <td></td>
             <td></td>
@@ -199,7 +245,7 @@
             <td>40.000</td>
         </tr>
         <tr>
-            <td scope="row">2</td>
+            <td>2</td>
             <td>Doanh thu</td>
             <td></td>
             <td></td>
@@ -222,7 +268,7 @@
             <td>14.000</td>
         </tr>
         <tr>
-            <td scope="3">3</td>
+            <td>3</td>
             <td>Chênh lệch thu chi trước thuế</td>
             <td></td>
             <td></td>
@@ -244,9 +290,8 @@
             <td>8.670</td>
             <td>9.500</td>
         </tr>
-        {{-- department I.2  --}}
         <tr>
-            <th scope="row">I.2</th>
+            <th>I.2</th>
             <th>Quỹ BLTD cho DNNVV (tách ra từ I)</th>
             <th></th>
             <th></th>
@@ -269,7 +314,7 @@
             <th>12.100</th>
         </tr>
         <tr>
-            <td scope="row">1</td>
+            <td>1</td>
             <td>Cho vay</td>
             <td></td>
             <td></td>
@@ -292,7 +337,7 @@
             <td>1.500</td>
         </tr>
         <tr>
-            <td scope="row">2</td>
+            <td>2</td>
             <td>Doanh thu</td>
             <td></td>
             <td></td>
@@ -315,7 +360,7 @@
             <td>5.500</td>
         </tr>
         <tr>
-            <td scope="3">3</td>
+            <td>3</td>
             <td>Chênh lệch thu chi trước thuế</td>
             <td></td>
             <td></td>
@@ -337,10 +382,9 @@
             <td>4.991</td>
             <td>9.100</td>
         </tr>
-        {{-- department II --}}
         <tr>
-            <th scope="row">II</th>
-            <th class="parent">Quỹ bảo vệ và phát triển rừng</th>
+            <th>II</th>
+            <th>Quỹ bảo vệ và phát triển rừng</th>
             <th></th>
             <th></th>
             <th></th>
@@ -362,7 +406,7 @@
             <th>52.000</th>
         </tr>
         <tr>
-            <td scope="row">1</td>
+            <td>1</td>
             <td>Thu từ thủy điện</td>
             <td></td>
             <td></td>
@@ -385,7 +429,7 @@
             <td>49.270</td>
         </tr>
         <tr>
-            <td scope="row">2</td>
+            <td>2</td>
             <td>Thu từ Cty CP cấp nước</td>
             <td></td>
             <td></td>
@@ -408,7 +452,7 @@
             <td>2.600</td>
         </tr>
         <tr>
-            <td scope="3">3</td>
+            <td>3</td>
             <td>Lãi tiền gửi ngân hàng</td>
             <td></td>
             <td></td>
@@ -430,10 +474,9 @@
             <td>120</td>
             <td>130</td>
         </tr>
-        {{-- department III --}}
         <tr>
-            <th scope="row">III</th>
-            <th class="parent">Quỹ phát triển đất</th>
+            <th>III</th>
+            <th>Quỹ phát triển đất</th>
             <th></th>
             <th>90.277</th>
             <th>90.277</th>
@@ -455,7 +498,7 @@
             <th>50.300</th>
         </tr>
         <tr>
-            <td scope="row">1</td>
+            <td>1</td>
             <td>Hỗ trợ từ NS tỉnh</td>
             <td></td>
             <td>90.000</td>
@@ -478,7 +521,7 @@
             <td>30.000</td>
         </tr>
         <tr>
-            <td scope="row">2</td>
+            <td>2</td>
             <td>Thu sự nghiệp Qũy</td>
             <td></td>
             <td>277</td>
@@ -501,7 +544,7 @@
             <td>300</td>
         </tr>
         <tr>
-            <td scope="3">3</td>
+            <td>3</td>
             <td>Thu hồi tạm ứng vốn</td>
             <td></td>
             <td></td>

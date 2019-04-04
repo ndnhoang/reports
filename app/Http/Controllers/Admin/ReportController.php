@@ -188,6 +188,9 @@ class ReportController extends Controller
 
     public function export()
     {
-        return Excel::download(new ReportsExport, 'reports.xlsx');
+        Excel::store(new ReportsExport, 'report.xlsx');
+        
+        return redirect()->back();
+        
     }
 }
