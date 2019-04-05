@@ -3,7 +3,7 @@
 -- https://www.phpmyadmin.net/
 --
 -- Host: localhost:3306
--- Generation Time: Apr 02, 2019 at 05:58 PM
+-- Generation Time: Apr 05, 2019 at 05:44 PM
 -- Server version: 5.7.22-0ubuntu0.17.10.1
 -- PHP Version: 7.1.17-0ubuntu0.17.10.1
 
@@ -121,7 +121,8 @@ INSERT INTO `migrations` (`id`, `migration`, `batch`) VALUES
 (13, '2019_03_31_174341_create_admin_role_table', 4),
 (15, '2019_04_01_043106_create_reports_table', 5),
 (16, '2019_04_01_042929_create_report_types_table', 6),
-(17, '2019_04_02_044127_add_department_id_to_users', 7);
+(17, '2019_04_02_044127_add_department_id_to_users', 7),
+(18, '2019_04_05_031657_create_report_metas_table', 8);
 
 -- --------------------------------------------------------
 
@@ -155,8 +156,33 @@ CREATE TABLE `reports` (
 --
 
 INSERT INTO `reports` (`id`, `name`, `status`, `type_id`, `created_at`, `updated_at`) VALUES
-(1, 'Tổng hợp các khoản thu các quỹ tài chính ngoài ngân sách do địa phương quản lý', 1, 1, '2019-04-01 03:26:13', '2019-04-01 23:58:26'),
+(1, 'Tổng hợp các khoản thu các quỹ tài chính ngoài ngân sách do địa phương quản lý', 1, 1, '2019-04-01 03:26:13', '2019-04-04 21:43:17'),
 (2, 'Report 01', 0, 4, '2019-04-01 03:52:18', '2019-04-01 03:52:18');
+
+-- --------------------------------------------------------
+
+--
+-- Table structure for table `report_metas`
+--
+
+CREATE TABLE `report_metas` (
+  `id` bigint(20) UNSIGNED NOT NULL,
+  `report_id` int(11) NOT NULL,
+  `meta_name` varchar(191) COLLATE utf8mb4_unicode_ci NOT NULL,
+  `meta_value` longtext COLLATE utf8mb4_unicode_ci,
+  `created_at` timestamp NULL DEFAULT NULL,
+  `updated_at` timestamp NULL DEFAULT NULL
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
+
+--
+-- Dumping data for table `report_metas`
+--
+
+INSERT INTO `report_metas` (`id`, `report_id`, `meta_name`, `meta_value`, `created_at`, `updated_at`) VALUES
+(1, 1, 'period', '{\"period_from\":\"2011\",\"period_to\":\"2020\"}', '2019-04-04 20:55:05', '2019-04-04 21:29:22'),
+(2, 1, 'last_year', '2018', '2019-04-04 21:29:22', '2019-04-04 21:29:22'),
+(3, 1, 'dispatch_date', '03/2019', '2019-04-04 21:29:22', '2019-04-04 21:29:22'),
+(4, 1, 'departments', '{\"1\":[\"Cho vay\",\"Doanh thu\",\"Ch\\u00eanh l\\u1ec7ch thu chi tr\\u01b0\\u1edbc thu\\u1ebf\"],\"4\":[\"Thu t\\u1eeb th\\u1ee7y \\u0111i\\u1ec7n\",\"Thu t\\u1eeb Cty CP c\\u1ea5p n\\u01b0\\u1edbc\",\"L\\u00e3i ti\\u1ec1n g\\u1eedi ng\\u00e2n h\\u00e0ng\"],\"8\":[\"H\\u1ed7 tr\\u1ee3 t\\u1eeb NS t\\u1ec9nh\",\"Thu s\\u1ef1 nghi\\u1ec7p Qu\\u1ef9\",\"Thu h\\u1ed3i t\\u1ea1m \\u1ee9ng v\\u1ed1n\"]}', '2019-04-05 00:19:21', '2019-04-05 01:36:16');
 
 -- --------------------------------------------------------
 
@@ -225,7 +251,7 @@ CREATE TABLE `users` (
 --
 
 INSERT INTO `users` (`id`, `name`, `username`, `password`, `remember_token`, `created_at`, `updated_at`, `department_id`) VALUES
-(2, NULL, 'user1', '$2y$10$p2go5zTdJBwAu1PUA7X.du/yqZSH7GkhepUmeYPlKdM1IWgOK/8LS', NULL, '2019-03-31 08:32:23', '2019-04-01 21:52:55', 1),
+(2, NULL, 'user1', '$2y$10$F7r1Ung7HWctr3mr7wt8ouKhEdqM1sFvMZ.o3Qo5LyvxmywMb5Jta', NULL, '2019-03-31 08:32:23', '2019-04-05 01:40:10', 1),
 (5, NULL, 'user2', '$2y$10$2RJzb7V3sKnBIeSefI0bOe269zCvfbl4xHZulmWfeu1y5/88h5kMy', NULL, '2019-04-01 21:51:44', '2019-04-01 21:54:07', 8),
 (6, NULL, 'user3', '$2y$10$UQo0joXdevVUAwV5jZLfu.BzfcgIeB.e5zH5g7SuDtLMdvtTSmlV.', NULL, '2019-04-01 21:58:05', '2019-04-01 21:58:05', 4);
 
@@ -272,6 +298,12 @@ ALTER TABLE `reports`
   ADD PRIMARY KEY (`id`);
 
 --
+-- Indexes for table `report_metas`
+--
+ALTER TABLE `report_metas`
+  ADD PRIMARY KEY (`id`);
+
+--
 -- Indexes for table `report_types`
 --
 ALTER TABLE `report_types`
@@ -299,7 +331,7 @@ ALTER TABLE `users`
 -- AUTO_INCREMENT for table `admins`
 --
 ALTER TABLE `admins`
-  MODIFY `id` bigint(20) UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=8;
+  MODIFY `id` bigint(20) UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=7;
 --
 -- AUTO_INCREMENT for table `admin_role`
 --
@@ -309,22 +341,27 @@ ALTER TABLE `admin_role`
 -- AUTO_INCREMENT for table `departments`
 --
 ALTER TABLE `departments`
-  MODIFY `id` bigint(20) UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=10;
+  MODIFY `id` bigint(20) UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=9;
 --
 -- AUTO_INCREMENT for table `migrations`
 --
 ALTER TABLE `migrations`
-  MODIFY `id` int(10) UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=18;
+  MODIFY `id` int(10) UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=19;
 --
 -- AUTO_INCREMENT for table `reports`
 --
 ALTER TABLE `reports`
+  MODIFY `id` bigint(20) UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=3;
+--
+-- AUTO_INCREMENT for table `report_metas`
+--
+ALTER TABLE `report_metas`
   MODIFY `id` bigint(20) UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=5;
 --
 -- AUTO_INCREMENT for table `report_types`
 --
 ALTER TABLE `report_types`
-  MODIFY `id` bigint(20) UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=7;
+  MODIFY `id` bigint(20) UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=6;
 --
 -- AUTO_INCREMENT for table `roles`
 --
