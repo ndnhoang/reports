@@ -1,4 +1,6 @@
-<?php if ($report_metas->period && $report_metas->period->period_from && $report_metas->period->period_to && $report_metas->last_year) {
+<?php 
+
+if ($report_metas->period && $report_metas->period->period_from && $report_metas->period->period_to && $report_metas->last_year) {
     $valueCurrentCols = $report_metas->last_year - $report_metas->period->period_from + 1;
     $valueFutureCols = $report_metas->period->period_to - $report_metas->last_year;
     $valueCols = $valueCurrentCols * 2 + $valueFutureCols;
@@ -25,7 +27,7 @@ $totalCols = $valueCols + 3
         </tr>
         <tr>
             <th colspan="{{ $totalCols }}">
-                {{ $name }} GIAI ĐOẠN {{ $report_metas->period ? $report_metas->period->period_from : ''}}-{{ $report_metas->period ? $report_metas->period->period_to : ''}}<br>
+                @uppercase($report->name) GIAI ĐOẠN {{ $report_metas->period ? $report_metas->period->period_from : ''}}-{{ $report_metas->period ? $report_metas->period->period_to : ''}}<br>
                 (Kèm theo công văn số   /UBND-TH ngày     /{{ $report_metas->dispatch_date }} của UBND tỉnh Thừa Thiên Huế)
             </th>
         </tr>
@@ -67,10 +69,12 @@ $totalCols = $valueCols + 3
     </thead>
     <tbody>
         @if ($report_metas->money_sources)
+            <?php $count = 0; ?>
             @foreach ($report_metas->money_sources as $key => $items)
+                <?php $count++; ?>
                 <tr>
-                    <th>I</th>
-                    <th>{{ App\Department::find($key)->name }}</th>
+                    <th><?php echo NumConvert::roman($count); ?></th>
+                    <th>@uppercase(App\Department::find($key)->name)</th>
                     <th></th>
                     @if ($report_metas->period && $report_metas->period->period_from && $report_metas->last_year)
                         @for ($i = 0; $i < $valueCurrentCols * 2; $i++)
@@ -98,8 +102,8 @@ $totalCols = $valueCols + 3
                 @if ($departmentChilds)
                     @foreach ($departmentChilds as $key_child => $child)
                         <tr>
-                            <th>I.{{ $key_child + 1 }}</th>
-                            <th>{{ $child->name }}</th>
+                            <th><?php echo NumConvert::roman($count); ?>.{{ $key_child + 1 }}</th>
+                            <th>{{ $child->name }} (tách ra từ <?php echo NumConvert::roman($count); ?>)</th>
                             <th></th>
                             @if ($report_metas->period && $report_metas->period->period_from && $report_metas->last_year)
                                 @for ($i = 0; $i < $valueCurrentCols * 2; $i++)

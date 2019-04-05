@@ -25,7 +25,7 @@ class BladeServiceProvider extends ServiceProvider
     public function boot()
     {
         Blade::directive('uppercase', function($expression) {
-            return "<?php echo strtoupper($expression); ?>";
+            return "<?php echo mb_strtoupper($expression); ?>";
         });
     }
 }
