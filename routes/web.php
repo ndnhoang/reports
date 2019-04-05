@@ -16,6 +16,11 @@ Auth::routes();
 
 Route::get('/', 'HomeController@index')->name('home');
 
+/* User */
+
+Route::get('/change-password', 'UserController@index')->name('user.change.password');
+Route::post('/change-password', 'UserController@changePassword')->name('user.change.password');
+
 /* Admin */
 
 Route::get('/admin', 'Admin\DashboardController@index')->name('dashboard');
