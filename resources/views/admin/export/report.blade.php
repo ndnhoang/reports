@@ -1,573 +1,131 @@
+<?php if ($report_metas->period && $report_metas->period->period_from && $report_metas->period->period_to && $report_metas->last_year) {
+    $valueCurrentCols = $report_metas->last_year - $report_metas->period->period_from + 1;
+    $valueFutureCols = $report_metas->period->period_to - $report_metas->last_year;
+    $valueCols = $valueCurrentCols * 2 + $valueFutureCols;
+} else {
+    $valueCols = 0;
+    $valueCurrentCols = 0;
+    $valueFutureCols = 0;
+}
+$totalCols = $valueCols + 3
+?>
 <table>
     <thead>
         <tr>
-            <th></th>
-            <th></th>
-            <th></th>
-            <th></th>
-            <th></th>
-            <th></th>
-            <th></th>
-            <th></th>
-            <th></th>
-            <th></th>
-            <th></th>
-            <th></th>
-            <th></th>
-            <th></th>
-            <th></th>
-            <th></th>
-            <th></th>
-            <th></th>
-            <th></th>
+            @for ($i = 0; $i < $totalCols - 2; $i++) 
+                <th></th>
+            @endfor
             <th colspan="2">{{ $report->report_type->name }}</th>
         </tr>
         <tr>
+            @for ($i = 0; $i < $totalCols - 4; $i++) 
             <th></th>
-            <th></th>
-            <th></th>
-            <th></th>
-            <th></th>
-            <th></th>
-            <th></th>
-            <th></th>
-            <th></th>
-            <th></th>
-            <th></th>
-            <th></th>
-            <th></th>
-            <th></th>
-            <th></th>
-            <th></th>
-            <th></th>
-            <th colspan="4">(Số liệu tính đến ngày 31/12/2018)</th>
+            @endfor
+            <th colspan="4">(Số liệu tính đến ngày 31/12/{{ $report_metas->last_year }})</th>
         </tr>
         <tr>
-            <th colspan="21">
-                {{ $name }} GIAI ĐOẠN 2011-2020<br>
-                (Kèm theo công văn số   /UBND-TH ngày     /03/2019 của UBND tỉnh Thừa Thiên Huế)
+            <th colspan="{{ $totalCols }}">
+                {{ $name }} GIAI ĐOẠN {{ $report_metas->period ? $report_metas->period->period_from : ''}}-{{ $report_metas->period ? $report_metas->period->period_to : ''}}<br>
+                (Kèm theo công văn số   /UBND-TH ngày     /{{ $report_metas->dispatch_date }} của UBND tỉnh Thừa Thiên Huế)
             </th>
         </tr>
         <tr>
-            <th colspan="21">Đơn vị tính: Triệu đồng</th>
+            <th colspan="{{ $totalCols }}">Đơn vị tính: Triệu đồng</th>
         </tr>
         <tr>
             <th rowspan="2">TT</th>
             <th rowspan="2">Nguồn thu của Quỹ</th>
             <th rowspan="2">Chi tiết (tỷ lệ % hoặc mức đóng góp, đối tượng nộp và nội dung nguồn thu của Quỹ)</th>
-            <th colspan="2">Năm 2011</th>
-            <th colspan="2">Năm 2012</th>
-            <th colspan="2">Năm 2013</th>
-            <th colspan="2">Năm 2014</th>
-            <th colspan="2">Năm 2015</th>
-            <th colspan="2">Năm 2016</th>
-            <th colspan="2">Năm 2017</th>
-            <th colspan="2">Năm 2018</th>
-            <th rowspan="2">Kế hoạch 2019</th>
-            <th rowspan="2">Kế hoạch 2020</th>
+            @if ($report_metas->period && $report_metas->period->period_from && $report_metas->period->period_to && $report_metas->last_year)
+                @for ($i = $report_metas->period->period_from; $i <= $report_metas->last_year; $i++)
+                    <th colspan="2">Năm {{ $i }}</th>
+                @endfor
+
+                @for ($i = $report_metas->last_year + 1; $i <= $report_metas->period->period_to; $i++)
+                    <th rowspan="2">Kế hoạch {{ $i }}</th>
+                @endfor
+            @endif
         </tr>
         <tr>
-            <th>KH</th>
-            <th>TH</th>
-            <th>KH</th>
-            <th>TH</th>
-            <th>KH</th>
-            <th>TH</th>
-            <th>KH</th>
-            <th>TH</th>
-            <th>KH</th>
-            <th>TH</th>
-            <th>KH</th>
-            <th>TH</th>
-            <th>KH</th>
-            <th>TH</th>
-            <th>KH</th>
-            <th>TH</th>
+            @if ($report_metas->period && $report_metas->period->period_from && $report_metas->last_year)
+                @for ($i = 0; $i < $valueCurrentCols; $i++)
+                    <th>KH</th>
+                    <th>TH</th>
+                @endfor
+            @endif
         </tr>
         <tr>
             <th>A</th>
             <th>B</th>
             <td>1</td>
-            <td>2</td>
-            <td>3</td>
-            <td>4</td>
-            <td>5</td>
-            <td>6</td>
-            <td>7</td>
-            <td>8</td>
-            <td>9</td>
-            <td>10</td>
-            <td>11</td>
-            <td>12</td>
-            <td>13</td>
-            <td>14</td>
-            <td>15</td>
-            <td>16</td>
-            <td>17</td>
-            <td>18</td>
-            <td>19</td>
+            @if ($report_metas->period && $report_metas->period->period_from && $report_metas->period->period_to && $report_metas->last_year)
+                @for ($i = 2; $i <= $valueCols + 1; $i++)
+                    <td>{{ $i }}</td>
+                @endfor
+            @endif
         </tr>
     </thead>
     <tbody>
-        <tr>
-            <th>I</th>
-            <th>Qũy đầu tư phát triển và bảo lãnh tín dụng cho DNNVV</th>
-            <th></th>
-            <th></th>
-            <th></th>
-            <th></th>
-            <th></th>
-            <th></th>
-            <th></th>
-            <th></th>
-            <th></th>
-            <th></th>
-            <th>9.559</th>
-            <th>16.760</th>
-            <th>27.688</th>
-            <th>18.255</th>
-            <th>26.555</th>
-            <th>25.071</th>
-            <th>32.394</th>
-            <th></th>
-            <th></th>
-        </tr>
-        <tr>
-            <td>1</td>
-            <td>Cho vay</td>
-            <td></td>
-            <td></td>
-            <td></td>
-            <td></td>
-            <td></td>
-            <td></td>
-            <td></td>
-            <td></td>
-            <td></td>
-            <td></td>
-            <td></td>
-            <td></td>
-            <td>8.800</td>
-            <td></td>
-            <td>3.577</td>
-            <td></td>
-            <td>12.747</td>
-            <td></td>
-            <td></td>
-        </tr>
-        <tr>
-            <td>2</td>
-            <td>Doanh thu</td>
-            <td></td>
-            <td></td>
-            <td></td>
-            <td></td>
-            <td></td>
-            <td></td>
-            <td></td>
-            <td></td>
-            <td></td>
-            <td></td>
-            <td>5.284</td>
-            <td>9.915</td>
-            <td>10.687</td>
-            <td>10.726</td>
-            <td>12.948</td>
-            <td>14.375</td>
-            <td>6.623</td>
-            <td></td>
-            <td></td>
-        </tr>
-        <tr>
-            <td>3</td>
-            <td>Chênh lệch thu chi trước thuế</td>
-            <td></td>
-            <td></td>
-            <td></td>
-            <td></td>
-            <td></td>
-            <td></td>
-            <td></td>
-            <td></td>
-            <td></td>
-            <td></td>
-            <td>4.275</td>
-            <td>6.845</td>
-            <td>8.201</td>
-            <td>7.529</td>
-            <td>10.030</td>
-            <td>10.696</td>
-            <td>13.024</td>
-            <td></td>
-            <td></td>
-        </tr>
-        <tr>
-            <th>I.1</th>
-            <th>Quỹ Đầu tư phát triển (tách ra từ I)</th>
-            <th></th>
-            <th></th>
-            <th></th>
-            <th></th>
-            <th></th>
-            <th></th>
-            <th></th>
-            <th></th>
-            <th></th>
-            <th></th>
-            <th></th>
-            <th></th>
-            <th></th>
-            <th></th>
-            <th></th>
-            <th></th>
-            <th></th>
-            <th>51.504</th>
-            <th>63.500</th>
-        </tr>
-        <tr>
-            <td>1</td>
-            <td>Cho vay</td>
-            <td></td>
-            <td></td>
-            <td></td>
-            <td></td>
-            <td></td>
-            <td></td>
-            <td></td>
-            <td></td>
-            <td></td>
-            <td></td>
-            <td></td>
-            <td></td>
-            <td></td>
-            <td></td>
-            <td></td>
-            <td></td>
-            <td></td>
-            <td>30.000</td>
-            <td>40.000</td>
-        </tr>
-        <tr>
-            <td>2</td>
-            <td>Doanh thu</td>
-            <td></td>
-            <td></td>
-            <td></td>
-            <td></td>
-            <td></td>
-            <td></td>
-            <td></td>
-            <td></td>
-            <td></td>
-            <td></td>
-            <td></td>
-            <td></td>
-            <td></td>
-            <td></td>
-            <td></td>
-            <td></td>
-            <td></td>
-            <td>12.834</td>
-            <td>14.000</td>
-        </tr>
-        <tr>
-            <td>3</td>
-            <td>Chênh lệch thu chi trước thuế</td>
-            <td></td>
-            <td></td>
-            <td></td>
-            <td></td>
-            <td></td>
-            <td></td>
-            <td></td>
-            <td></td>
-            <td></td>
-            <td></td>
-            <td></td>
-            <td></td>
-            <td></td>
-            <td></td>
-            <td></td>
-            <td></td>
-            <td></td>
-            <td>8.670</td>
-            <td>9.500</td>
-        </tr>
-        <tr>
-            <th>I.2</th>
-            <th>Quỹ BLTD cho DNNVV (tách ra từ I)</th>
-            <th></th>
-            <th></th>
-            <th></th>
-            <th></th>
-            <th></th>
-            <th></th>
-            <th></th>
-            <th></th>
-            <th></th>
-            <th></th>
-            <th></th>
-            <th></th>
-            <th></th>
-            <th></th>
-            <th></th>
-            <th></th>
-            <th></th>
-            <th>11.132</th>
-            <th>12.100</th>
-        </tr>
-        <tr>
-            <td>1</td>
-            <td>Cho vay</td>
-            <td></td>
-            <td></td>
-            <td></td>
-            <td></td>
-            <td></td>
-            <td></td>
-            <td></td>
-            <td></td>
-            <td></td>
-            <td></td>
-            <td></td>
-            <td></td>
-            <td></td>
-            <td></td>
-            <td></td>
-            <td></td>
-            <td></td>
-            <td>1.000</td>
-            <td>1.500</td>
-        </tr>
-        <tr>
-            <td>2</td>
-            <td>Doanh thu</td>
-            <td></td>
-            <td></td>
-            <td></td>
-            <td></td>
-            <td></td>
-            <td></td>
-            <td></td>
-            <td></td>
-            <td></td>
-            <td></td>
-            <td></td>
-            <td></td>
-            <td></td>
-            <td></td>
-            <td></td>
-            <td></td>
-            <td></td>
-            <td>5.141</td>
-            <td>5.500</td>
-        </tr>
-        <tr>
-            <td>3</td>
-            <td>Chênh lệch thu chi trước thuế</td>
-            <td></td>
-            <td></td>
-            <td></td>
-            <td></td>
-            <td></td>
-            <td></td>
-            <td></td>
-            <td></td>
-            <td></td>
-            <td></td>
-            <td></td>
-            <td></td>
-            <td></td>
-            <td></td>
-            <td></td>
-            <td></td>
-            <td></td>
-            <td>4.991</td>
-            <td>9.100</td>
-        </tr>
-        <tr>
-            <th>II</th>
-            <th>Quỹ bảo vệ và phát triển rừng</th>
-            <th></th>
-            <th></th>
-            <th></th>
-            <th></th>
-            <th></th>
-            <th>43.499</th>
-            <th>10.700</th>
-            <th>17.881</th>
-            <th>24.676</th>
-            <th>23.975</th>
-            <th>36.155</th>
-            <th>23.211</th>
-            <th>20.109</th>
-            <th>39.031</th>
-            <th>38.615</th>
-            <th>20.710</th>
-            <th>31.358</th>
-            <th>50.060</th>
-            <th>52.000</th>
-        </tr>
-        <tr>
-            <td>1</td>
-            <td>Thu từ thủy điện</td>
-            <td></td>
-            <td></td>
-            <td></td>
-            <td></td>
-            <td></td>
-            <td>39.630</td>
-            <td>7.096</td>
-            <td>16.197</td>
-            <td>22.932</td>
-            <td>22.223</td>
-            <td>34.054</td>
-            <td>21.381</td>
-            <td>17.891</td>
-            <td>36.612</td>
-            <td>36.156</td>
-            <td>18.814</td>
-            <td>28.763</td>
-            <td>47.392</td>
-            <td>49.270</td>
-        </tr>
-        <tr>
-            <td>2</td>
-            <td>Thu từ Cty CP cấp nước</td>
-            <td></td>
-            <td></td>
-            <td></td>
-            <td></td>
-            <td></td>
-            <td>3.869</td>
-            <td>3.511</td>
-            <td>1.683</td>
-            <td>1.620</td>
-            <td>1.751</td>
-            <td>1.727</td>
-            <td>1.830</td>
-            <td>1.821</td>
-            <td>2.419</td>
-            <td>2.276</td>
-            <td>1.896</td>
-            <td>2.494</td>
-            <td>2.548</td>
-            <td>2.600</td>
-        </tr>
-        <tr>
-            <td>3</td>
-            <td>Lãi tiền gửi ngân hàng</td>
-            <td></td>
-            <td></td>
-            <td></td>
-            <td></td>
-            <td></td>
-            <td></td>
-            <td>93</td>
-            <td></td>
-            <td>124</td>
-            <td></td>
-            <td>374</td>
-            <td></td>
-            <td>397</td>
-            <td></td>
-            <td>183</td>
-            <td></td>
-            <td>101</td>
-            <td>120</td>
-            <td>130</td>
-        </tr>
-        <tr>
-            <th>III</th>
-            <th>Quỹ phát triển đất</th>
-            <th></th>
-            <th>90.277</th>
-            <th>90.277</th>
-            <th>70.694</th>
-            <th>70.694</th>
-            <th>44.888</th>
-            <th>12.888</th>
-            <th>33.174</th>
-            <th>65.174</th>
-            <th>23.623</th>
-            <th>23.565</th>
-            <th>61.970</th>
-            <th>44.245</th>
-            <th>19.049</th>
-            <th>16.930</th>
-            <th>37.448</th>
-            <th>29.836</th>
-            <th>151.140</th>
-            <th>50.300</th>
-        </tr>
-        <tr>
-            <td>1</td>
-            <td>Hỗ trợ từ NS tỉnh</td>
-            <td></td>
-            <td>90.000</td>
-            <td>90.000</td>
-            <td>70.000</td>
-            <td>70.000</td>
-            <td>10.000</td>
-            <td>10.000</td>
-            <td>14.375</td>
-            <td>14.375</td>
-            <td></td>
-            <td></td>
-            <td></td>
-            <td>10.600</td>
-            <td></td>
-            <td>10.125</td>
-            <td></td>
-            <td></td>
-            <td>102.715</td>
-            <td>30.000</td>
-        </tr>
-        <tr>
-            <td>2</td>
-            <td>Thu sự nghiệp Qũy</td>
-            <td></td>
-            <td>277</td>
-            <td>277</td>
-            <td>694</td>
-            <td>694</td>
-            <td>888</td>
-            <td>888</td>
-            <td>659</td>
-            <td>659</td>
-            <td>577</td>
-            <td>577</td>
-            <td>353</td>
-            <td>353</td>
-            <td>305</td>
-            <td>305</td>
-            <td>250</td>
-            <td>250</td>
-            <td>300</td>
-            <td>300</td>
-        </tr>
-        <tr>
-            <td>3</td>
-            <td>Thu hồi tạm ứng vốn</td>
-            <td></td>
-            <td></td>
-            <td></td>
-            <td></td>
-            <td></td>
-            <td>34.000</td>
-            <td>2.000</td>
-            <td>18.140</td>
-            <td>50.140</td>
-            <td>23.046</td>
-            <td>22.988</td>
-            <td>61.617</td>
-            <td>33.292</td>
-            <td>18.744</td>
-            <td>6.500</td>
-            <td>37.198</td>
-            <td>29.586</td>
-            <td>48.125</td>
-            <td>20.000</td>
-        </tr>
+        @if ($report_metas->money_sources)
+            @foreach ($report_metas->money_sources as $key => $items)
+                <tr>
+                    <th>I</th>
+                    <th>{{ App\Department::find($key)->name }}</th>
+                    <th></th>
+                    @if ($report_metas->period && $report_metas->period->period_from && $report_metas->last_year)
+                        @for ($i = 0; $i < $valueCurrentCols * 2; $i++)
+                            <th></th>
+                        @endfor
+                        @for ($i = 0; $i < $valueFutureCols; $i++)
+                            <th></th>
+                        @endfor
+                    @endif
+                </tr>
+                @foreach($items as $index => $item)
+                    <tr>
+                        <td>{{ $index + 1 }}</td>
+                        <td>{{ $item }}</td>
+                        <td></td>
+                        @for ($i = 0; $i < $valueCurrentCols * 2; $i++)
+                            <td></td>
+                        @endfor
+                        @for ($i = 0; $i < $valueFutureCols; $i++)
+                            <td></td>
+                        @endfor
+                    </tr>
+                @endforeach
+                <?php $departmentChilds = App\Department::where('parent', $key)->get(); ?>
+                @if ($departmentChilds)
+                    @foreach ($departmentChilds as $key_child => $child)
+                        <tr>
+                            <th>I.{{ $key_child + 1 }}</th>
+                            <th>{{ $child->name }}</th>
+                            <th></th>
+                            @if ($report_metas->period && $report_metas->period->period_from && $report_metas->last_year)
+                                @for ($i = 0; $i < $valueCurrentCols * 2; $i++)
+                                    <th></th>
+                                @endfor
+                                @for ($i = 0; $i < $valueFutureCols; $i++)
+                                    <th></th>
+                                @endfor
+                            @endif
+                        </tr>
+                        @foreach($items as $index => $item)
+                            <tr>
+                                <td>{{ $index + 1 }}</td>
+                                <td>{{ $item }}</td>
+                                <td></td>
+                                @for ($i = 0; $i < $valueCurrentCols * 2; $i++)
+                                    <td></td>
+                                @endfor
+                                @for ($i = 0; $i < $valueFutureCols; $i++)
+                                    <td></td>
+                                @endfor
+                            </tr>
+                        @endforeach
+                    @endforeach
+                @endif
+            @endforeach
+        @endif
     </tbody>
 </table>

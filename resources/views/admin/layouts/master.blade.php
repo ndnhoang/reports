@@ -118,6 +118,9 @@
             width: 150px;
             vertical-align: middle;
         }
+        .select2.input-group .input-group-append button {
+            width: 100%;
+        }
     </style>
 
     <script type="text/javascript">

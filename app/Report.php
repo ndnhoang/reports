@@ -12,4 +12,10 @@ class Report extends Model
         return $this->belongsTo('App\ReportType', 'type_id');
     }
     
+    public function report_metas()
+    {
+        return $this->hasMany('App\ReportMeta');
+    }
+    
+    
 }

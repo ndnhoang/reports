@@ -62,7 +62,7 @@
 			</div>
 			<div class="tab-pane fade" id="nav-meta" role="tabpanel" aria-labelledby="nav-meta-tab">
 				<div class="my-5">
-					<form class="needs-validation" action="" novalidate>
+					<form class="needs-validation" action="{{ route('admin.report.add.meta', [$id]) }}" method="post" novalidate>
 						{{ csrf_field() }}
 						<div class="form-group">
 							<div class="form-row">
@@ -71,22 +71,24 @@
 									<div class="form-row">
 										<div class="col-md-6">
 											<div class="input-group">
-												<input type="text" class="form-control datepicker-view-mode" placeholder="From">
+												<input type="text" name="period_from" value='{{ $report_metas->period ? $report_metas->period->period_from : ''}}' class="form-control datepicker-view-mode" placeholder="From" required>
 												<div class="input-group-append">
 													<span class="input-group-text">
 															<i class="far fa-calendar-alt"></i>
 													</span>
 												</div>
+												<div class="invalid-feedback">Period from is required</div>
 											</div>
 										</div>
 										<div class="col-md-6">
 											<div class="input-group">
-												<input type="text" class="form-control datepicker-view-mode" placeholder="To">
+												<input type="text" name="period_to" value='{{ $report_metas->period ? $report_metas->period->period_to : '' }}' class="form-control datepicker-view-mode" placeholder="To" required>
 												<div class="input-group-append">
 													<span class="input-group-text">
 															<i class="far fa-calendar-alt"></i>
 													</span>
 												</div>
+												<div class="invalid-feedback">Period to is required</div>
 											</div>
 										</div>
 									</div>
@@ -96,23 +98,25 @@
 										<div class="col-md-6">
 											<label for="last_year">Last year</label>
 											<div class="input-group">
-												<input type="text" class="form-control datepicker-view-mode" placeholder="Last year">
+												<input type="text" name="last_year" value='{{ $report_metas->last_year }}' class="form-control datepicker-view-mode" placeholder="Last year" required>
 												<div class="input-group-append">
 													<span class="input-group-text">
 															<i class="far fa-calendar-alt"></i>
 													</span>
 												</div>
+												<div class="invalid-feedback">Last year is required</div>
 											</div>
 										</div>
 										<div class="col-md-6">
 											<label for="dispatch_date">Dispatch date</label>
 											<div class="input-group">
-												<input type="text" class="form-control datepicker-view-mode-month" placeholder="Dispatch date">
+												<input type="text" name="dispatch_date" value='{{ $report_metas->dispatch_date }}' class="form-control datepicker-view-mode-month" placeholder="Dispatch date" required>
 												<div class="input-group-append">
 													<span class="input-group-text">
 															<i class="far fa-calendar-alt"></i>
 													</span>
 												</div>
+												<div class="invalid-feedback">Dispatch date is required</div>
 											</div>
 										</div>
 									</div>
@@ -123,11 +127,13 @@
 							<div class="form-row">
 								<div class="col-md-12">
 									<div class="input-group select2">
-										<input type="hidden" name="departments_prev" value="">
+										<input type="hidden" name="departments_prev" value='{{ collect($report_metas->departments)->implode(",") }}'>
 										<select name="departments" class="form-control select2-multiple" multiple="multiple">
-												<option value="1">Quỹ đầu tư phát triển và bảo lãnh tín dụng cho DNNVV</option>
-												<option value="4">Quỹ bảo vệ và phát triển rừng</option>
-												<option value="8">Quỹ phát triển đất</option>
+												@if ($departments)
+													@foreach ($departments as $department)
+														<option value="{{ $department->id }}">{{ $department->name }}</option>
+													@endforeach
+												@endif
 										</select>
 										<div class="input-group-append">
 											<button type="button" class="btn btn-primary" id="add_department">Add department</button>
@@ -136,7 +142,34 @@
 								</div>
 							</div>
 						</div>
-						<div id="departments_container" class="py-3"></div>
+						<div id="departments_container" class="py-3">
+							@if ($report_metas->money_sources)
+								@foreach ($report_metas->money_sources as $key => $items)
+									<div id="department_meta_{{ $key }}" class="department-group py-2">
+										<hr>
+										<label>{{ App\Department::find($key)->name }}</label>
+										@foreach($items as $index => $item)
+										<div class="form-group">
+											<div class="form-row">
+												<div class="col-md-6">
+													<div class="input-group">
+														<input type="text" name="money_source_{{ $key }}[]" value="{{ $item }}" class="form-control" required="">
+														<div class="input-group-append">
+															<button class="btn btn-outline-success btn-add" type="button" data-id="{{ $key }}"><i class="fas fa-plus"></i></button>
+															<button style="display: {{ ($index == 0) ? 'none' : 'block' }};" class="btn btn-outline-danger btn-remove" type="button" data-id="{{ $key }}"><i class="fas fa-minus"></i></button>
+														</div>
+														<div class="invalid-feedback">Please enter data</div>
+													</div>
+												</div>
+											</div>
+										</div>
+										@endforeach
+									</div>
+								@endforeach
+							@endif
+						</div>
+						<button type="submit" class="btn btn-primary">Save</button>
+						<a href="{{ route('admin.report') }}" class="btn btn-dark float-right">Return to list</a>
 					</form>
 				</div>
 			</div>
@@ -163,6 +196,17 @@
     });
   }, false);
 })();
+
+$(function() {
+    $('a[data-toggle="tab"]').on('click', function(e) {
+        window.localStorage.setItem('activeTab', $(e.target).attr('href'));
+    });
+    var activeTab = window.localStorage.getItem('activeTab');
+    if (activeTab) {
+		$('#nav-tab a[href="' + activeTab + '"]').tab('show');
+    }
+});
+
 function addDepartment(department) {
 	$html = '<div id="department_meta_'+department["id"]+'" class="department-group py-2"><hr>' +
 		'<label>'+department["name"]+'</label>' +
@@ -170,11 +214,12 @@ function addDepartment(department) {
 		'<div class="form-row">' +
 			'<div class="col-md-6">' +
 				'<div class="input-group">' +
-					'<input type="text" name="money_source_'+department["id"]+'[]" class="form-control">' +
+					'<input type="text" name="money_source_'+department["id"]+'[]" class="form-control" required>' +
 					'<div class="input-group-append">' +
 						'<button class="btn btn-outline-success btn-add" type="button" data-id="'+department["id"]+'"><i class="fas fa-plus"></i></button>' +
 						'<button style="display: none;" class="btn btn-outline-danger btn-remove" type="button" data-id="'+department["id"]+'"><i class="fas fa-minus"></i></button>' +
 					'</div>' +
+					'<div class="invalid-feedback">Please enter data</div>' + 
 				'</div>' +
 			'</div>' +
 		'</div>' +
@@ -187,11 +232,12 @@ function addMetaOfDepartment(departmentId) {
 		'<div class="form-row">' +
 			'<div class="col-md-6">' +
 				'<div class="input-group">' +
-					'<input type="text" name="money_source_'+departmentId+'[]" class="form-control">' +
+					'<input type="text" name="money_source_'+departmentId+'[]" class="form-control" required>' +
 					'<div class="input-group-append">' +
 						'<button class="btn btn-outline-success btn-add" type="button" data-id="'+departmentId+'"><i class="fas fa-plus"></i></button>' +
 						'<button class="btn btn-outline-danger btn-remove" type="button" data-id="'+departmentId+'"><i class="fas fa-minus"></i></button>' +
 					'</div>' +
+					'<div class="invalid-feedback">Please enter data</div>' + 
 				'</div>' +
 			'</div>' +
 		'</div>' +
@@ -216,12 +262,6 @@ $(document).on('click', '.btn-remove', function() {
 	var parent = $(this).parents('.form-group').first();
 	parent.remove();
 });
-$(document).on('click', '.btn-department-remove', function() {
-	var id = $(this).attr('data-id');
-	var parent = $(this).parents('.form-group').first();
-	parent.remove();
-	$('#department_meta_'+id).remove();
-});
 
 $( ".select2-single, .select2-multiple" ).select2( {
 	theme: "bootstrap",
@@ -237,6 +277,14 @@ $("select[name=departments]").on("select2:select", function (evt) {
 	$(this).append($element);
 	$(this).trigger("change");
 });
+@if ($report_metas->departments)
+	var departments = [];
+	@foreach ($report_metas->departments as $department)
+		departments.push({{ $department }});
+	@endforeach
+	$("select[name=departments]").val(departments);
+	$('select[name=departments]').trigger('change');
+@endif
 $('#add_department').on('click', function() {
 	var departments_prev = $('input[name=departments_prev]').val();
 	var departments = $('select[name=departments]').select2('val');
@@ -284,6 +332,7 @@ function arr_diff (a1, a2) {
 	}
 	return a;
 }
+
 </script>
 
 @endsection

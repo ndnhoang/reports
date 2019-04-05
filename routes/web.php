@@ -11,13 +11,10 @@
 |
 */
 
-Route::get('/', function () {
-    return view('form');
-});
 
 Auth::routes();
 
-Route::get('/home', 'HomeController@index')->name('home');
+Route::get('/', 'HomeController@index')->name('home');
 
 /* Admin */
 
@@ -82,3 +79,5 @@ Route::post('/admin/report/{id}/delete', 'Admin\ReportController@destroy')->name
 Route::get('/admin/report/departments', 'Admin\ReportController@showDepartments')->name('admin.report.departments');
 
 Route::get('/admin/report/{id}/export', 'Admin\ReportController@export')->name('admin.report.export');
+
+Route::post('/admin/report/{id}/meta', 'Admin\ReportController@addReportMeta')->name('admin.report.add.meta');
