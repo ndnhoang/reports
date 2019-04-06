@@ -115,18 +115,21 @@ class ReportController extends Controller
                 $report_meta_dispatch_date = $report_meta_dispatch_date->meta_value;
             }
 
-            $report_meta_departments = ReportMeta::where('report_id', $id)->where('meta_name', 'departments')->first();
             $departments_selected = array();
-            if ($report_meta_departments) {
-                $report_meta_departments = json_decode($report_meta_departments->meta_value);
-                foreach($report_meta_departments as $key => $item) {
-                    $departments_selected[] = $key;
+            $departmentInstance_selected = DB::table('department_report')->where('report_id', $id)->get(['department_id']);
+            if ($departmentInstance_selected) {
+                foreach ($departmentInstance_selected as $item) {
+                    $departments_selected[] = $item->department_id;
                 }
             }
 
-            $report_metas = json_decode(json_encode(array('period' => $report_meta_period, 'last_year' => $report_meta_last_year, 'dispatch_date' => $report_meta_dispatch_date, 'departments' => $departments_selected, 'money_sources' => $report_meta_departments)));
+            $report_metas = json_decode(json_encode(array('period' => $report_meta_period, 'last_year' => $report_meta_last_year, 'dispatch_date' => $report_meta_dispatch_date, 'departments' => $departments_selected)));
 
-            $departments = Department::where('parent', 0)->get();
+            if ($departments_selected) {
+                $departments = Department::where('parent', 0)->whereNotIn('id', $departments_selected)->get();
+            } else {
+                $departments = Department::where('parent', 0)->get();
+            }
 
             return view('admin.report.edit', compact(['id', 'report', 'report_types', 'report_metas', 'departments']));
         } else {
@@ -268,21 +271,43 @@ class ReportController extends Controller
             ['meta_value' => $request->dispatch_date]
         );
 
-        $departments = $request->departments_prev;
+        $report = Report::find($id);
+        $allDepartments = array();
+        if ($report) {
+            $allDepartmentsInstance = $report->departments()->get(['department_id']);
+            if ($allDepartmentsInstance) {
+                foreach ($allDepartmentsInstance as $item) {
+                    $allDepartments[] = $item->department_id;
+                }
+            }
+        }
+        $departments = $request->departments;
         if ($departments) {
-            $departments = explode(',', $departments); 
-            $money_sources = array();
             foreach ($departments as $department) {
                 $key = 'money_source_'.$department;
-                $money_sources[$department] = $request->$key;
+                $hasDepartment = Department::whereHas('reports', function($q) use ($id) {
+                    $q->where('report_id', $id);
+                })->where('id', $department)->first();
+                if ($hasDepartment) {
+                    $hasDepartment->reports()->updateExistingPivot($id, ['value' => json_encode($request->$key)]);
+                } else {
+                    $departmentInstance = Department::find($department);
+                    $departmentInstance->reports()->attach($id, ['value' => json_encode($request->$key)]);
+                }
             }
-            $departments = json_encode($money_sources);
+
+            if ($allDepartments) {
+                foreach ($allDepartments as $item) {
+                    if (!in_array($item, $departments)) {
+                        $report->departments()->detach([$item]);
+                    }
+                }
+            }
+        } else {
+            if ($allDepartments) { 
+                $report->departments()->detach();
+            }
         }
-        
-        ReportMeta::updateOrCreate(
-            ['report_id' => $id, 'meta_name' => 'departments'],
-            ['meta_value' => $departments]
-        );
 
         $request->session()->flash('success', 'Save report meta successful.');
         

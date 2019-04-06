@@ -16,6 +16,9 @@ class Report extends Model
     {
         return $this->hasMany('App\ReportMeta');
     }
-    
+    public function departments()
+    {
+        return $this->belongsToMany('App\Department');
+    }
     
 }

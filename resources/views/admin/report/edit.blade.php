@@ -128,11 +128,17 @@
 								<div class="col-md-12">
 									<div class="input-group select2">
 										<input type="hidden" name="departments_prev" value='{{ collect($report_metas->departments)->implode(",") }}'>
-										<select name="departments" class="form-control select2-multiple" multiple="multiple">
+										<select name="departments[]" class="form-control select2-multiple" multiple="multiple">
 												@if ($departments)
 													@foreach ($departments as $department)
 														<option value="{{ $department->id }}">{{ $department->name }}</option>
 													@endforeach
+													@if ($report_metas->departments) 
+														@foreach ($report_metas->departments as $department)
+															<?php $department = App\Department::find($department) ?>
+															<option value="{{ $department->id }}">{{ $department->name }}</option>
+														@endforeach
+													@endif
 												@endif
 										</select>
 										<div class="input-group-append">
@@ -143,27 +149,32 @@
 							</div>
 						</div>
 						<div id="departments_container" class="py-3">
-							@if ($report_metas->money_sources)
-								@foreach ($report_metas->money_sources as $key => $items)
-									<div id="department_meta_{{ $key }}" class="department-group py-2">
+							@if ($report_metas->departments)
+								@foreach ($report_metas->departments as $item)
+									<div id="department_meta_{{ $item }}" class="department-group py-2">
 										<hr>
-										<label>{{ App\Department::find($key)->name }}</label>
-										@foreach($items as $index => $item)
-										<div class="form-group">
-											<div class="form-row">
-												<div class="col-md-6">
-													<div class="input-group">
-														<input type="text" name="money_source_{{ $key }}[]" value="{{ $item }}" class="form-control" required="">
-														<div class="input-group-append">
-															<button class="btn btn-outline-success btn-add" type="button" data-id="{{ $key }}"><i class="fas fa-plus"></i></button>
-															<button style="display: {{ ($index == 0) ? 'none' : 'block' }};" class="btn btn-outline-danger btn-remove" type="button" data-id="{{ $key }}"><i class="fas fa-minus"></i></button>
+										<?php $item = App\Department::find($item) ?>
+										<label>{{ $item->name }}</label>
+										<?php $meta_value = $item->reports()->where('report_id', $id)->first()->pivot->value ?>
+										@if ($meta_value)
+											<?php $meta_value = json_decode($meta_value) ?>
+											@foreach($meta_value as $index => $value)
+											<div class="form-group">
+												<div class="form-row">
+													<div class="col-md-6">
+														<div class="input-group">
+															<input type="text" name="money_source_{{ $item->id }}[]" value="{{ $value }}" class="form-control" required="">
+															<div class="input-group-append">
+																<button class="btn btn-outline-success btn-add" type="button" data-id="{{ $item->id }}"><i class="fas fa-plus"></i></button>
+																<button style="display: {{ ($index == 0) ? 'none' : 'block' }};" class="btn btn-outline-danger btn-remove" type="button" data-id="{{ $item->id }}"><i class="fas fa-minus"></i></button>
+															</div>
+															<div class="invalid-feedback">Please enter data</div>
 														</div>
-														<div class="invalid-feedback">Please enter data</div>
 													</div>
 												</div>
 											</div>
-										</div>
-										@endforeach
+											@endforeach
+										@endif
 									</div>
 								@endforeach
 							@endif
@@ -269,7 +280,7 @@ $( ".select2-single, .select2-multiple" ).select2( {
 	maximumSelectionSize: 6,
 	containerCssClass: ':all:'
 } );
-$("select[name=departments]").on("select2:select", function (evt) {
+$("select[name='departments[]']").on("select2:select", function (evt) {
 	var element = evt.params.data.element;
 	var $element = $(element);
 	
@@ -282,13 +293,13 @@ $("select[name=departments]").on("select2:select", function (evt) {
 	@foreach ($report_metas->departments as $department)
 		departments.push({{ $department }});
 	@endforeach
-	$("select[name=departments]").val(departments);
-	$('select[name=departments]').trigger('change');
+	$("select[name='departments[]']").val(departments);
+	$('select[name="departments[]"]').trigger('change');
 @endif
 $('#add_department').on('click', function() {
 	var departments_prev = $('input[name=departments_prev]').val();
-	var departments = $('select[name=departments]').select2('val');
-	$('input[name=departments_prev]').val(departments);
+	var departments = $('select[name="departments[]"]').select2('val');
+	$('input[name=departments_prev]').val([departments]);
 	if (departments_prev == '') {
 		departments_prev = [];
 	} else {

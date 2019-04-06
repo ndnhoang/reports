@@ -175,8 +175,13 @@ class UserController extends Controller
 
         $department = Department::find($request->department_id);
 
-        $department->users()->save($user);
-        
+        if ($department) {
+            $department->users()->save($user);
+        } else {
+            $user->department_id = 0;
+            $user->save();
+        }
+
         $request->session()->flash('success', 'Edit user successful.');
         
         return redirect()->back()->withInput();

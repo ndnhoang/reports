@@ -16,5 +16,9 @@ class Department extends Model
     {
         return $this->hasMany('App\User');
     }
+    public function reports()
+    {
+        return $this->belongsToMany('App\Report')->withPivot('value');
+    }
     
 }
