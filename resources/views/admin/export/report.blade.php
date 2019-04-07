@@ -9,7 +9,7 @@ if ($report_metas->period && $report_metas->period->period_from && $report_metas
     $valueCurrentCols = 0;
     $valueFutureCols = 0;
 }
-$totalCols = $valueCols + 3
+$totalCols = $valueCols + 3;
 ?>
 <table>
     <thead>
@@ -68,13 +68,12 @@ $totalCols = $valueCols + 3
         </tr>
     </thead>
     <tbody>
-        @if ($report_metas->money_sources)
-            <?php $count = 0; ?>
-            @foreach ($report_metas->money_sources as $key => $items)
-                <?php $count++; ?>
+        @if ($report_metas->departments)
+            @foreach ($report_metas->departments as $key => $item)
+                <?php $item = App\Department::find($item) ?>
                 <tr>
-                    <th><?php echo NumConvert::roman($count); ?></th>
-                    <th>@uppercase(App\Department::find($key)->name)</th>
+                    <th><?php echo NumConvert::roman($key + 1); ?></th>
+                    <th>@uppercase($item->name)</th>
                     <th></th>
                     @if ($report_metas->period && $report_metas->period->period_from && $report_metas->last_year)
                         @for ($i = 0; $i < $valueCurrentCols * 2; $i++)
@@ -85,25 +84,29 @@ $totalCols = $valueCols + 3
                         @endfor
                     @endif
                 </tr>
-                @foreach($items as $index => $item)
-                    <tr>
-                        <td>{{ $index + 1 }}</td>
-                        <td>{{ $item }}</td>
-                        <td></td>
-                        @for ($i = 0; $i < $valueCurrentCols * 2; $i++)
+                <?php $meta_value = $item->reports()->where('report_id', $report->id)->first()->pivot->value ?>
+                @if ($meta_value)
+                    <?php $meta_value = json_decode($meta_value) ?>
+                    @foreach($meta_value as $index => $value)
+                        <tr>
+                            <td>{{ $index + 1 }}</td>
+                            <td>{{ $value }}</td>
                             <td></td>
-                        @endfor
-                        @for ($i = 0; $i < $valueFutureCols; $i++)
-                            <td></td>
-                        @endfor
-                    </tr>
-                @endforeach
-                <?php $departmentChilds = App\Department::where('parent', $key)->get(); ?>
+                            @for ($i = 0; $i < $valueCurrentCols * 2; $i++)
+                                <td></td>
+                            @endfor
+                            @for ($i = 0; $i < $valueFutureCols; $i++)
+                                <td></td>
+                            @endfor
+                        </tr>
+                    @endforeach
+                @endif
+                <?php $departmentChilds = App\Department::where('parent', $item->id)->get(); ?>
                 @if ($departmentChilds)
                     @foreach ($departmentChilds as $key_child => $child)
                         <tr>
-                            <th><?php echo NumConvert::roman($count); ?>.{{ $key_child + 1 }}</th>
-                            <th>{{ $child->name }} (tách ra từ <?php echo NumConvert::roman($count); ?>)</th>
+                            <th><?php echo NumConvert::roman($key + 1); ?>.{{ $key_child + 1 }}</th>
+                            <th>{{ $child->name }} (tách ra từ <?php echo NumConvert::roman($key + 1); ?>)</th>
                             <th></th>
                             @if ($report_metas->period && $report_metas->period->period_from && $report_metas->last_year)
                                 @for ($i = 0; $i < $valueCurrentCols * 2; $i++)
@@ -114,19 +117,21 @@ $totalCols = $valueCols + 3
                                 @endfor
                             @endif
                         </tr>
-                        @foreach($items as $index => $item)
-                            <tr>
-                                <td>{{ $index + 1 }}</td>
-                                <td>{{ $item }}</td>
-                                <td></td>
-                                @for ($i = 0; $i < $valueCurrentCols * 2; $i++)
+                        @if ($meta_value)
+                            @foreach($meta_value as $index => $value)
+                                <tr>
+                                    <td>{{ $index + 1 }}</td>
+                                    <td>{{ $value }}</td>
                                     <td></td>
-                                @endfor
-                                @for ($i = 0; $i < $valueFutureCols; $i++)
-                                    <td></td>
-                                @endfor
-                            </tr>
-                        @endforeach
+                                    @for ($i = 0; $i < $valueCurrentCols * 2; $i++)
+                                        <td></td>
+                                    @endfor
+                                    @for ($i = 0; $i < $valueFutureCols; $i++)
+                                        <td></td>
+                                    @endfor
+                                </tr>
+                            @endforeach
+                        @endif
                     @endforeach
                 @endif
             @endforeach

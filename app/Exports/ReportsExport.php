@@ -13,6 +13,7 @@ use PhpOffice\PhpSpreadsheet\Cell\Coordinate;
 use App\Report;
 use App\ReportMeta;
 use App\Department;
+use DB;
 
 
 class ReportsExport implements FromView, WithEvents
@@ -40,22 +41,28 @@ class ReportsExport implements FromView, WithEvents
             $cols = $cols + ($report_meta_last_year - $report_meta_period->period_from + 1) * 2 + ($report_meta_period->period_to -  $report_meta_last_year);
         }
 
-        $report_meta_departments = ReportMeta::where('report_id', $this->id)->where('meta_name', 'departments')->first();
-        if ($report_meta_departments) {
-            $report_meta_departments = json_decode($report_meta_departments->meta_value);
-            foreach($report_meta_departments as $key => $items) {
+        $departmentInstance_selected = DB::table('department_report')->where('report_id', $this->id)->get(['department_id']);
+        if ($departmentInstance_selected) {
+            foreach ($departmentInstance_selected as $item) {
                 $rows += 1;
                 $rows_title[] = $rows;
-                foreach ($items as $item) {
-                    $rows += 1;
+                $item = Department::find($item->department_id);
+                $meta_value = $item->reports()->where('report_id', $this->id)->first()->pivot->value;
+                if ($meta_value) {
+                    $meta_value = json_decode($meta_value);
+                    foreach ($meta_value as $value) {
+                        $rows += 1;
+                    }
                 }
-                $department_childs = Department::where('parent', $key)->get();
+                $department_childs = Department::where('parent', $item->id)->get();
                 if ($department_childs) {
                     foreach ($department_childs as $child) {
                         $rows += 1;
                         $rows_title[] = $rows;
-                        foreach ($items as $item) {
-                            $rows += 1;
+                        if ($meta_value) {
+                            foreach ($meta_value as $value) {
+                                $rows += 1;
+                            }
                         }
                     }
                 }
@@ -133,16 +140,15 @@ class ReportsExport implements FromView, WithEvents
             $report_meta_dispatch_date = $report_meta_dispatch_date->meta_value;
         }
 
-        $report_meta_departments = ReportMeta::where('report_id', $this->id)->where('meta_name', 'departments')->first();
         $departments_selected = array();
-        if ($report_meta_departments) {
-            $report_meta_departments = json_decode($report_meta_departments->meta_value);
-            foreach($report_meta_departments as $key => $item) {
-                $departments_selected[] = $key;
+        $departmentInstance_selected = DB::table('department_report')->where('report_id', $this->id)->get(['department_id']);
+        if ($departmentInstance_selected) {
+            foreach ($departmentInstance_selected as $item) {
+                $departments_selected[] = $item->department_id;
             }
         }
 
-        $report_metas = json_decode(json_encode(array('period' => $report_meta_period, 'last_year' => $report_meta_last_year, 'dispatch_date' => $report_meta_dispatch_date, 'departments' => $departments_selected, 'money_sources' => $report_meta_departments)));
+        $report_metas = json_decode(json_encode(array('period' => $report_meta_period, 'last_year' => $report_meta_last_year, 'dispatch_date' => $report_meta_dispatch_date, 'departments' => $departments_selected)));
 
         return view('admin.export.report', compact(['report', 'departments_selected', 'report_metas']));
     }
