@@ -2,206 +2,222 @@
 
 @section('content')
 <div class="container">
+    @if (Session::has('success'))
+        <div class="alert alert-success">
+            {{ Session::get('success') }}
+        </div>
+    @endif
     @if ($user->department && count($user->department->reports) > 0)
-        
-            @foreach ($user->department->reports as $report)
-                <?php ?>
-                <form class="card my-4 needs-validation h6" action="{{ route('report.save') }}" method="post" novalidate>
-                    {{ csrf_field() }}
-                    <div class="card-header"><strong>{{ $report->report_type->name }}</strong> - {{ $report->name }}</div>
-                    <div class="card-body">
-                        <h5 class="card-title"><strong>{{ $user->department->name }}</strong></h5>
-                        <input type="hidden" name="departments[]" value="{{ $user->department->id }}">
-                        <div class="card-content mb-5">
-                            <div class="form-group">
-                                <label for=""><strong>Chi tiết (tỷ lệ % hoặc mức đóng góp, đối tượng nộp và nội dung nguồn thu của Quỹ)</strong></label>
-                                <div class="form-row">
-                                    <?php $meta_value = $user->department->reports()->where('report_id', $report->id)->first()->pivot->value ?>
-                                    @if ($meta_value)
-                                        <?php $meta_value = json_decode($meta_value) ?>
-                                        @foreach ($meta_value as $value)
-                                            <div class="col-md-4">
-                                                <label for="">{{ $value }}</label>
-                                                <div class="input-group">
-                                                    <input class="form-control input-number" type="text" name="detail_{{ $user->department->id }}[]">
-                                                    <div class="input-group-append"><span class="input-group-text">triệu đ</span></div>   
-                                                    <div class="invalid-feedback">Field is required</div>
-                                                </div>
+        @foreach ($user->department->reports as $report)
+            <?php ?>
+            <form class="card my-4 needs-validation h6" action="{{ route('report.save') }}" method="post" novalidate>
+                {{ csrf_field() }}
+                <div class="card-header"><strong>{{ $report->report_type->name }}</strong> - {{ $report->name }}</div>
+                <input type="hidden" name="report" value="{{ $report->id }}">
+                <div class="card-body">
+                    <h5 class="card-title"><strong>{{ $user->department->name }}</strong></h5>
+                    <input type="hidden" name="departments[]" value="{{ $user->department->id }}">
+                    <div class="card-content mb-5">
+                        <div class="form-group">
+                            <label for=""><strong>Chi tiết (tỷ lệ % hoặc mức đóng góp, đối tượng nộp và nội dung nguồn thu của Quỹ)</strong></label>
+                            <div class="form-row">
+                                <?php $meta_value = $user->department->reports()->where('report_id', $report->id)->first()->pivot->value ?>
+                                @if ($meta_value)
+                                    <?php $meta_value = json_decode($meta_value) ?>
+                                    <?php $value_data = $user->department->reports()->where('report_id', $report->id)->first()->pivot->value_data ?>
+                                    <?php $value_data = json_decode($value_data) ?> 
+                                    <?php $departmentTmp = $user->department->id ?>
+                                    <?php $count_key = count($value_data->$departmentTmp->detail); ?>
+                                    @foreach ($meta_value as $key => $value)
+                                        <div class="col-md-4">
+                                            <label for="">{{ $value }}</label>
+                                            <div class="input-group">
+                                                <input class="form-control input-number" value="{{ ($key < $count_key) ? $value_data->$departmentTmp->detail[$key] : '' }}" type="text" name="detail_{{ $user->department->id }}[]">
+                                                <div class="input-group-append"><span class="input-group-text">triệu đ</span></div>   
+                                                <div class="invalid-feedback">Field is required</div>
                                             </div>
-                                        @endforeach
-                                    @endif
-                                </div>
+                                        </div>
+                                    @endforeach
+                                @endif
                             </div>
-                            <?php $report_meta_period = App\ReportMeta::where('report_id', $report->id)->where('meta_name', 'period')->first(); 
-                            if ($report_meta_period) {
-                                $report_meta_period = json_decode($report_meta_period->meta_value);
-                            }
-                            $report_meta_last_year = App\ReportMeta::where('report_id', $report->id)->where('meta_name', 'last_year')->first();
-                            if ($report_meta_last_year) {
-                                $report_meta_last_year = $report_meta_last_year->meta_value;
-                            }
-                            ?>
-                            @if ($report_meta_period && $report_meta_period->period_from && $report_meta_last_year)
-                                @for ($i = $report_meta_period->period_from; $i <= $report_meta_last_year; $i++)
-                                    <div class="form-group">
-                                        <label for=""><strong>Năm {{ $i }} (KH)</strong></label>
-                                        <div class="form-row">
-                                            @if ($meta_value)
-                                                @foreach ($meta_value as $value)
-                                                    <div class="col-md-4">
-                                                        <label for="">{{ $value }}</label>
-                                                        <div class="input-group">
-                                                            <input class="form-control input-number" type="text" name="KH{{ $i }}_{{ $user->department->id }}[]">
-                                                            <div class="input-group-append"><span class="input-group-text">triệu đ</span></div>   
-                                                            <div class="invalid-feedback">Field is required</div>
-                                                        </div>
-                                                    </div>
-                                                @endforeach
-                                            @endif
-                                        </div>
-                                    </div>
-                                    <div class="form-group">
-                                        <label for=""><strong>Năm {{ $i }} (TH)</strong></label>
-                                        <div class="form-row">
-                                            @if ($meta_value)
-                                                @foreach ($meta_value as $value)
-                                                    <div class="col-md-4">
-                                                        <label for="">{{ $value }}</label>
-                                                        <div class="input-group">
-                                                            <input class="form-control input-number" type="text" name="TH{{ $i }}_{{ $user->department->id }}[]">
-                                                            <div class="input-group-append"><span class="input-group-text">triệu đ</span></div>   
-                                                            <div class="invalid-feedback">Field is required</div>
-                                                        </div>
-                                                    </div>
-                                                @endforeach
-                                            @endif
-                                        </div>
-                                    </div>
-                                @endfor
-                            @endif
-                            @if ($report_meta_period && $report_meta_period->period_to && $report_meta_last_year)
-                                @for ($i = $report_meta_last_year + 1; $i <= $report_meta_period->period_to; $i++)
-                                    <div class="form-group">
-                                        <label for=""><strong>Kế hoạch {{ $i }}</strong></label>
-                                        <div class="form-row">
-                                            @if ($meta_value)
-                                                @foreach ($meta_value as $value)
-                                                    <div class="col-md-4">
-                                                        <label for="">{{ $value }}</label>
-                                                        <div class="input-group">
-                                                            <input class="form-control input-number" type="text" name="KH{{ $i }}_{{ $user->department->id }}[]">
-                                                            <div class="input-group-append"><span class="input-group-text">triệu đ</span></div>   
-                                                            <div class="invalid-feedback">Field is required</div>
-                                                        </div>
-                                                    </div>
-                                                @endforeach
-                                            @endif
-                                        </div>
-                                    </div>
-                                @endfor
-                            @endif
                         </div>
-                        <?php $department_childs = App\Department::where('parent', $user->department->id)->get() ?>
-                        @if ($department_childs)
-                            @foreach ($department_childs as $child)
-                                <h5 class="card-title"><strong>{{ $child->name }} (tách ra từ "{{ $user->department->name }}")</strong></h5>
-                                <input type="hidden" name="departments[]" value="{{ $child->id }}">
-                                <div class="card-content mb-5">
-                                    <div class="form-group">
-                                        <label for=""><strong>Chi tiết (tỷ lệ % hoặc mức đóng góp, đối tượng nộp và nội dung nguồn thu của Quỹ)</strong></label>
-                                        <div class="form-row">
-                                            <?php $meta_value = $user->department->reports()->where('report_id', $report->id)->first()->pivot->value ?>
-                                            @if ($meta_value)
-                                                <?php $meta_value = json_decode($meta_value) ?>
-                                                @foreach ($meta_value as $value)
-                                                    <div class="col-md-4">
-                                                        <label for="">{{ $value }}</label>
-                                                        <div class="input-group">
-                                                            <input class="form-control input-number" type="text" name="detail_{{ $child->id }}[]">
-                                                            <div class="input-group-append"><span class="input-group-text">triệu đ</span></div>   
-                                                            <div class="invalid-feedback">Field is required</div>
-                                                        </div>
+                        <?php $report_meta_period = App\ReportMeta::where('report_id', $report->id)->where('meta_name', 'period')->first(); 
+                        if ($report_meta_period) {
+                            $report_meta_period = json_decode($report_meta_period->meta_value);
+                        }
+                        $report_meta_last_year = App\ReportMeta::where('report_id', $report->id)->where('meta_name', 'last_year')->first();
+                        if ($report_meta_last_year) {
+                            $report_meta_last_year = $report_meta_last_year->meta_value;
+                        }
+                        ?>
+                        @if ($report_meta_period && $report_meta_period->period_from && $report_meta_last_year)
+                            @for ($i = $report_meta_period->period_from; $i <= $report_meta_last_year; $i++)
+                                <?php $year = 'year_'.$i ?>
+                                <?php $count_kh = count($value_data->$departmentTmp->$year->kh) ?>
+                                <?php $count_th = count($value_data->$departmentTmp->$year->th) ?>
+                                <div class="form-group">
+                                    <label for=""><strong>Năm {{ $i }} (KH)</strong></label>
+                                    <div class="form-row">
+                                        @if ($meta_value)
+                                            @foreach ($meta_value as $key => $value)
+                                                <div class="col-md-4">
+                                                    <label for="">{{ $value }}</label>
+                                                    <div class="input-group">
+                                                        <input class="form-control input-number" value="{{ ($key < $count_kh) ? $value_data->$departmentTmp->$year->kh[$key] : '' }}" type="text" name="KH{{ $i }}_{{ $user->department->id }}[]">
+                                                        <div class="input-group-append"><span class="input-group-text">triệu đ</span></div>   
+                                                        <div class="invalid-feedback">Field is required</div>
                                                     </div>
-                                                @endforeach
-                                            @endif
-                                        </div>
+                                                </div>
+                                            @endforeach
+                                        @endif
                                     </div>
-                                    <?php $report_meta_period = App\ReportMeta::where('report_id', $report->id)->where('meta_name', 'period')->first(); 
-                                    if ($report_meta_period) {
-                                        $report_meta_period = json_decode($report_meta_period->meta_value);
-                                    }
-                                    $report_meta_last_year = App\ReportMeta::where('report_id', $report->id)->where('meta_name', 'last_year')->first();
-                                    if ($report_meta_last_year) {
-                                        $report_meta_last_year = $report_meta_last_year->meta_value;
-                                    }
-                                    ?>
-                                    @if ($report_meta_period && $report_meta_period->period_from && $report_meta_last_year)
-                                        @for ($i = $report_meta_period->period_from; $i <= $report_meta_last_year; $i++)
-                                            <div class="form-group">
-                                                <label for=""><strong>Năm {{ $i }} (KH)</strong></label>
-                                                <div class="form-row">
-                                                    @if ($meta_value)
-                                                        @foreach ($meta_value as $value)
-                                                            <div class="col-md-4">
-                                                                <label for="">{{ $value }}</label>
-                                                                <div class="input-group">
-                                                                    <input class="form-control input-number" type="text" name="KH{{ $i }}_{{ $child->id }}[]">
-                                                                    <div class="input-group-append"><span class="input-group-text">triệu đ</span></div>   
-                                                                    <div class="invalid-feedback">Field is required</div>
-                                                                </div>
-                                                            </div>
-                                                        @endforeach
-                                                    @endif
-                                                </div>
-                                            </div>
-                                            <div class="form-group">
-                                                <label for=""><strong>Năm {{ $i }} (TH)</strong></label>
-                                                <div class="form-row">
-                                                    @if ($meta_value)
-                                                        @foreach ($meta_value as $value)
-                                                            <div class="col-md-4">
-                                                                <label for="">{{ $value }}</label>
-                                                                <div class="input-group">
-                                                                    <input class="form-control input-number" type="text" name="TH{{ $i }}_{{ $child->id }}[]">
-                                                                    <div class="input-group-append"><span class="input-group-text">triệu đ</span></div>   
-                                                                    <div class="invalid-feedback">Field is required</div>
-                                                                </div>
-                                                            </div>
-                                                        @endforeach
-                                                    @endif
-                                                </div>
-                                            </div>
-                                        @endfor
-                                    @endif
-                                    @if ($report_meta_period && $report_meta_period->period_to && $report_meta_last_year)
-                                        @for ($i = $report_meta_last_year + 1; $i <= $report_meta_period->period_to; $i++)
-                                            <div class="form-group">
-                                                <label for=""><strong>Kế hoạch {{ $i }}</strong></label>
-                                                <div class="form-row">
-                                                    @if ($meta_value)
-                                                        @foreach ($meta_value as $value)
-                                                            <div class="col-md-4">
-                                                                <label for="">{{ $value }}</label>
-                                                                <div class="input-group">
-                                                                    <input class="form-control input-number" type="text" name="KH{{ $i }}_{{ $child->id }}[]">
-                                                                    <div class="input-group-append"><span class="input-group-text">triệu đ</span></div>   
-                                                                    <div class="invalid-feedback">Field is required</div>
-                                                                </div>
-                                                            </div>
-                                                        @endforeach
-                                                    @endif
-                                                </div>
-                                            </div>
-                                        @endfor
-                                    @endif
                                 </div>
-                            @endforeach
+                                <div class="form-group">
+                                    <label for=""><strong>Năm {{ $i }} (TH)</strong></label>
+                                    <div class="form-row">
+                                        @if ($meta_value)
+                                            @foreach ($meta_value as $key => $value)
+                                                <div class="col-md-4">
+                                                    <label for="">{{ $value }}</label>
+                                                    <div class="input-group">
+                                                        <input class="form-control input-number" value="{{ ($key < $count_th) ? $value_data->$departmentTmp->$year->th[$key] : '' }}" type="text" name="TH{{ $i }}_{{ $user->department->id }}[]">
+                                                        <div class="input-group-append"><span class="input-group-text">triệu đ</span></div>   
+                                                        <div class="invalid-feedback">Field is required</div>
+                                                    </div>
+                                                </div>
+                                            @endforeach
+                                        @endif
+                                    </div>
+                                </div>
+                            @endfor
                         @endif
-                        <button type="submit" class="btn btn-primary">Submit</button>
+                        @if ($report_meta_period && $report_meta_period->period_to && $report_meta_last_year)
+                            @for ($i = $report_meta_last_year + 1; $i <= $report_meta_period->period_to; $i++)
+                                <div class="form-group">
+                                    <label for=""><strong>Kế hoạch {{ $i }}</strong></label>
+                                    <div class="form-row">
+                                        @if ($meta_value)
+                                            @foreach ($meta_value as $value)
+                                                <div class="col-md-4">
+                                                    <label for="">{{ $value }}</label>
+                                                    <div class="input-group">
+                                                        <input class="form-control input-number" type="text" name="KH{{ $i }}_{{ $user->department->id }}[]">
+                                                        <div class="input-group-append"><span class="input-group-text">triệu đ</span></div>   
+                                                        <div class="invalid-feedback">Field is required</div>
+                                                    </div>
+                                                </div>
+                                            @endforeach
+                                        @endif
+                                    </div>
+                                </div>
+                            @endfor
+                        @endif
                     </div>
-                </form>
-            @endforeach
-        
+                    <?php $department_childs = App\Department::where('parent', $user->department->id)->get() ?>
+                    @if ($department_childs)
+                        @foreach ($department_childs as $child)
+                            <?php $departmentTmp = $child->id ?>
+                            <?php $count_key = count($value_data->$departmentTmp->detail); ?>
+                            <h5 class="card-title"><strong>{{ $child->name }} (tách ra từ "{{ $user->department->name }}")</strong></h5>
+                            <input type="hidden" name="departments[]" value="{{ $child->id }}">
+                            <div class="card-content mb-5">
+                                <div class="form-group">
+                                    <label for=""><strong>Chi tiết (tỷ lệ % hoặc mức đóng góp, đối tượng nộp và nội dung nguồn thu của Quỹ)</strong></label>
+                                    <div class="form-row">
+                                        <?php $meta_value = $user->department->reports()->where('report_id', $report->id)->first()->pivot->value ?>
+                                        @if ($meta_value)
+                                            <?php $meta_value = json_decode($meta_value) ?>
+                                            @foreach ($meta_value as $key => $value)
+                                                <div class="col-md-4">
+                                                    <label for="">{{ $value }}</label>
+                                                    <div class="input-group">
+                                                        <input class="form-control input-number" value="{{ ($key < $count_key) ? $value_data->$departmentTmp->detail[$key] : '' }}" type="text" name="detail_{{ $child->id }}[]">
+                                                        <div class="input-group-append"><span class="input-group-text">triệu đ</span></div>   
+                                                        <div class="invalid-feedback">Field is required</div>
+                                                    </div>
+                                                </div>
+                                            @endforeach
+                                        @endif
+                                    </div>
+                                </div>
+                                <?php $report_meta_period = App\ReportMeta::where('report_id', $report->id)->where('meta_name', 'period')->first(); 
+                                if ($report_meta_period) {
+                                    $report_meta_period = json_decode($report_meta_period->meta_value);
+                                }
+                                $report_meta_last_year = App\ReportMeta::where('report_id', $report->id)->where('meta_name', 'last_year')->first();
+                                if ($report_meta_last_year) {
+                                    $report_meta_last_year = $report_meta_last_year->meta_value;
+                                }
+                                ?>
+                                @if ($report_meta_period && $report_meta_period->period_from && $report_meta_last_year)
+                                    @for ($i = $report_meta_period->period_from; $i <= $report_meta_last_year; $i++)
+                                        <?php $year = 'year_'.$i ?>
+                                        <?php $count_kh = count($value_data->$departmentTmp->$year->kh) ?>
+                                        <?php $count_th = count($value_data->$departmentTmp->$year->th) ?>
+                                        <div class="form-group">
+                                            <label for=""><strong>Năm {{ $i }} (KH)</strong></label>
+                                            <div class="form-row">
+                                                @if ($meta_value)
+                                                    @foreach ($meta_value as $key => $value)
+                                                        <div class="col-md-4">
+                                                            <label for="">{{ $value }}</label>
+                                                            <div class="input-group">
+                                                                <input class="form-control input-number" value="{{ ($key < $count_kh) ? $value_data->$departmentTmp->$year->kh[$key] : '' }}" type="text" name="KH{{ $i }}_{{ $child->id }}[]">
+                                                                <div class="input-group-append"><span class="input-group-text">triệu đ</span></div>   
+                                                                <div class="invalid-feedback">Field is required</div>
+                                                            </div>
+                                                        </div>
+                                                    @endforeach
+                                                @endif
+                                            </div>
+                                        </div>
+                                        <div class="form-group">
+                                            <label for=""><strong>Năm {{ $i }} (TH)</strong></label>
+                                            <div class="form-row">
+                                                @if ($meta_value)
+                                                    @foreach ($meta_value as $key => $value)
+                                                        <div class="col-md-4">
+                                                            <label for="">{{ $value }}</label>
+                                                            <div class="input-group">
+                                                                <input class="form-control input-number" value="{{ ($key < $count_th) ? $value_data->$departmentTmp->$year->th[$key] : '' }}" type="text" name="TH{{ $i }}_{{ $child->id }}[]">
+                                                                <div class="input-group-append"><span class="input-group-text">triệu đ</span></div>   
+                                                                <div class="invalid-feedback">Field is required</div>
+                                                            </div>
+                                                        </div>
+                                                    @endforeach
+                                                @endif
+                                            </div>
+                                        </div>
+                                    @endfor
+                                @endif
+                                @if ($report_meta_period && $report_meta_period->period_to && $report_meta_last_year)
+                                    @for ($i = $report_meta_last_year + 1; $i <= $report_meta_period->period_to; $i++)
+                                        <div class="form-group">
+                                            <label for=""><strong>Kế hoạch {{ $i }}</strong></label>
+                                            <div class="form-row">
+                                                @if ($meta_value)
+                                                    @foreach ($meta_value as $value)
+                                                        <div class="col-md-4">
+                                                            <label for="">{{ $value }}</label>
+                                                            <div class="input-group">
+                                                                <input class="form-control input-number" type="text" name="KH{{ $i }}_{{ $child->id }}[]">
+                                                                <div class="input-group-append"><span class="input-group-text">triệu đ</span></div>   
+                                                                <div class="invalid-feedback">Field is required</div>
+                                                            </div>
+                                                        </div>
+                                                    @endforeach
+                                                @endif
+                                            </div>
+                                        </div>
+                                    @endfor
+                                @endif
+                            </div>
+                        @endforeach
+                    @endif
+                    <button type="submit" class="btn btn-primary">Submit</button>
+                </div>
+            </form>
+        @endforeach
     @else
         <div class="alert alert-danger">
             <h5 class="mb-0">No data</h5>

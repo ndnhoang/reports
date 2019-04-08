@@ -1,13 +1,15 @@
 -- phpMyAdmin SQL Dump
--- version 4.6.6deb5
+-- version 4.8.3
 -- https://www.phpmyadmin.net/
 --
--- Host: localhost:3306
--- Generation Time: Apr 08, 2019 at 05:27 PM
--- Server version: 5.7.22-0ubuntu0.17.10.1
--- PHP Version: 7.1.17-0ubuntu0.17.10.1
+-- Host: 127.0.0.1
+-- Generation Time: Apr 08, 2019 at 07:04 PM
+-- Server version: 10.1.36-MariaDB
+-- PHP Version: 7.2.11
 
 SET SQL_MODE = "NO_AUTO_VALUE_ON_ZERO";
+SET AUTOCOMMIT = 0;
+START TRANSACTION;
 SET time_zone = "+00:00";
 
 
@@ -118,7 +120,7 @@ CREATE TABLE `department_report` (
 --
 
 INSERT INTO `department_report` (`id`, `department_id`, `report_id`, `value`, `created_at`, `updated_at`, `value_data`) VALUES
-(1, 1, 1, '[\"Cho vay\",\"Doanh thu\",\"Ch\\u00eanh l\\u1ec7ch thu chi tr\\u01b0\\u1edbc thu\\u1ebf\"]', NULL, NULL, NULL),
+(1, 1, 1, '[\"Cho vay\",\"Doanh thu\",\"Ch\\u00eanh l\\u1ec7ch thu chi tr\\u01b0\\u1edbc thu\\u1ebf\"]', NULL, NULL, '{\"1\":{\"detail\":[null,null,null],\"year_2011\":{\"kh\":[null,null,null],\"th\":[null,null,null]},\"year_2012\":{\"kh\":[null,null,null],\"th\":[null,null,null]},\"year_2013\":{\"kh\":[null,null,null],\"th\":[null,null,null]},\"year_2014\":{\"kh\":[null,null,null],\"th\":[null,null,null]},\"year_2015\":{\"kh\":[null,null,null],\"th\":[null,null,null]},\"year_2016\":{\"kh\":[null,null,null],\"th\":[null,null,null]},\"year_2017\":{\"kh\":[null,null,null],\"th\":[null,null,null]},\"year_2018\":{\"kh\":[null,null,null],\"th\":[null,null,null]}},\"2\":{\"detail\":[null,null,null],\"year_2011\":{\"kh\":[null,null,null],\"th\":[null,null,null]},\"year_2012\":{\"kh\":[null,null,null],\"th\":[null,null,null]},\"year_2013\":{\"kh\":[null,null,null],\"th\":[null,null,null]},\"year_2014\":{\"kh\":[null,null,null],\"th\":[null,null,null]},\"year_2015\":{\"kh\":[null,null,null],\"th\":[null,null,null]},\"year_2016\":{\"kh\":[null,null,null],\"th\":[null,null,null]},\"year_2017\":{\"kh\":[null,null,null],\"th\":[null,null,null]},\"year_2018\":{\"kh\":[null,null,null],\"th\":[null,null,null]}},\"3\":{\"detail\":[null,null,null],\"year_2011\":{\"kh\":[null,null,null],\"th\":[null,null,null]},\"year_2012\":{\"kh\":[null,null,null],\"th\":[null,null,null]},\"year_2013\":{\"kh\":[null,null,null],\"th\":[null,null,null]},\"year_2014\":{\"kh\":[null,null,null],\"th\":[null,null,null]},\"year_2015\":{\"kh\":[null,null,null],\"th\":[null,null,null]},\"year_2016\":{\"kh\":[null,null,null],\"th\":[null,null,null]},\"year_2017\":{\"kh\":[null,null,null],\"th\":[null,null,null]},\"year_2018\":{\"kh\":[null,null,null],\"th\":[null,null,null]}}}'),
 (2, 4, 1, '[\"Thu t\\u1eeb th\\u1ee7y \\u0111i\\u1ec7n\",\"Thu t\\u1eeb Cty CP c\\u1ea5p n\\u01b0\\u1edbc\",\"L\\u00e3i ti\\u1ec1n g\\u1eedi ng\\u00e2n h\\u00e0ng\"]', NULL, NULL, NULL),
 (3, 8, 1, '[\"H\\u1ed7 tr\\u1ee3 t\\u1eeb NS t\\u1ec9nh\",\"Thu s\\u1ef1 nghi\\u1ec7p Qu\\u1ef9\",\"Thu h\\u1ed3i t\\u1ea1m \\u1ee9ng v\\u1ed1n\"]', NULL, NULL, NULL);
 
@@ -366,51 +368,62 @@ ALTER TABLE `users`
 --
 ALTER TABLE `admins`
   MODIFY `id` bigint(20) UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=7;
+
 --
 -- AUTO_INCREMENT for table `admin_role`
 --
 ALTER TABLE `admin_role`
   MODIFY `id` bigint(20) UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=6;
+
 --
 -- AUTO_INCREMENT for table `departments`
 --
 ALTER TABLE `departments`
   MODIFY `id` bigint(20) UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=10;
+
 --
 -- AUTO_INCREMENT for table `department_report`
 --
 ALTER TABLE `department_report`
-  MODIFY `id` bigint(20) UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=4;
+  MODIFY `id` bigint(20) UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=6;
+
 --
 -- AUTO_INCREMENT for table `migrations`
 --
 ALTER TABLE `migrations`
   MODIFY `id` int(10) UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=21;
+
 --
 -- AUTO_INCREMENT for table `reports`
 --
 ALTER TABLE `reports`
   MODIFY `id` bigint(20) UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=3;
+
 --
 -- AUTO_INCREMENT for table `report_metas`
 --
 ALTER TABLE `report_metas`
   MODIFY `id` bigint(20) UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=5;
+
 --
 -- AUTO_INCREMENT for table `report_types`
 --
 ALTER TABLE `report_types`
   MODIFY `id` bigint(20) UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=6;
+
 --
 -- AUTO_INCREMENT for table `roles`
 --
 ALTER TABLE `roles`
   MODIFY `id` bigint(20) UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=5;
+
 --
 -- AUTO_INCREMENT for table `users`
 --
 ALTER TABLE `users`
   MODIFY `id` bigint(20) UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=7;
+COMMIT;
+
 /*!40101 SET CHARACTER_SET_CLIENT=@OLD_CHARACTER_SET_CLIENT */;
 /*!40101 SET CHARACTER_SET_RESULTS=@OLD_CHARACTER_SET_RESULTS */;
 /*!40101 SET COLLATION_CONNECTION=@OLD_COLLATION_CONNECTION */;
