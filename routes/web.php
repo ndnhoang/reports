@@ -16,6 +16,8 @@ Auth::routes();
 
 Route::get('/', 'HomeController@index')->name('home');
 
+Route::post('/save-report', 'HomeController@saveReportData')->name('report.save');
+
 /* User */
 
 Route::get('/change-password', 'UserController@index')->name('user.change.password');

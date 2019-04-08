@@ -1,15 +1,13 @@
 -- phpMyAdmin SQL Dump
--- version 4.8.3
+-- version 4.6.6deb5
 -- https://www.phpmyadmin.net/
 --
--- Host: 127.0.0.1
--- Generation Time: Apr 07, 2019 at 06:50 PM
--- Server version: 10.1.36-MariaDB
--- PHP Version: 7.2.11
+-- Host: localhost:3306
+-- Generation Time: Apr 08, 2019 at 05:27 PM
+-- Server version: 5.7.22-0ubuntu0.17.10.1
+-- PHP Version: 7.1.17-0ubuntu0.17.10.1
 
 SET SQL_MODE = "NO_AUTO_VALUE_ON_ZERO";
-SET AUTOCOMMIT = 0;
-START TRANSACTION;
 SET time_zone = "+00:00";
 
 
@@ -111,17 +109,18 @@ CREATE TABLE `department_report` (
   `report_id` int(11) NOT NULL,
   `value` longtext COLLATE utf8mb4_unicode_ci,
   `created_at` timestamp NULL DEFAULT NULL,
-  `updated_at` timestamp NULL DEFAULT NULL
+  `updated_at` timestamp NULL DEFAULT NULL,
+  `value_data` longtext COLLATE utf8mb4_unicode_ci
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
 
 --
 -- Dumping data for table `department_report`
 --
 
-INSERT INTO `department_report` (`id`, `department_id`, `report_id`, `value`, `created_at`, `updated_at`) VALUES
-(1, 1, 1, '[\"Cho vay\",\"Doanh thu\",\"Ch\\u00eanh l\\u1ec7ch thu chi tr\\u01b0\\u1edbc thu\\u1ebf\"]', NULL, NULL),
-(2, 4, 1, '[\"Thu t\\u1eeb th\\u1ee7y \\u0111i\\u1ec7n\",\"Thu t\\u1eeb Cty CP c\\u1ea5p n\\u01b0\\u1edbc\",\"L\\u00e3i ti\\u1ec1n g\\u1eedi ng\\u00e2n h\\u00e0ng\"]', NULL, NULL),
-(3, 8, 1, '[\"H\\u1ed7 tr\\u1ee3 t\\u1eeb NS t\\u1ec9nh\",\"Thu s\\u1ef1 nghi\\u1ec7p Qu\\u1ef9\",\"Thu h\\u1ed3i t\\u1ea1m \\u1ee9ng v\\u1ed1n\"]', NULL, NULL);
+INSERT INTO `department_report` (`id`, `department_id`, `report_id`, `value`, `created_at`, `updated_at`, `value_data`) VALUES
+(1, 1, 1, '[\"Cho vay\",\"Doanh thu\",\"Ch\\u00eanh l\\u1ec7ch thu chi tr\\u01b0\\u1edbc thu\\u1ebf\"]', NULL, NULL, NULL),
+(2, 4, 1, '[\"Thu t\\u1eeb th\\u1ee7y \\u0111i\\u1ec7n\",\"Thu t\\u1eeb Cty CP c\\u1ea5p n\\u01b0\\u1edbc\",\"L\\u00e3i ti\\u1ec1n g\\u1eedi ng\\u00e2n h\\u00e0ng\"]', NULL, NULL, NULL),
+(3, 8, 1, '[\"H\\u1ed7 tr\\u1ee3 t\\u1eeb NS t\\u1ec9nh\",\"Thu s\\u1ef1 nghi\\u1ec7p Qu\\u1ef9\",\"Thu h\\u1ed3i t\\u1ea1m \\u1ee9ng v\\u1ed1n\"]', NULL, NULL, NULL);
 
 -- --------------------------------------------------------
 
@@ -150,7 +149,8 @@ INSERT INTO `migrations` (`id`, `migration`, `batch`) VALUES
 (16, '2019_04_01_042929_create_report_types_table', 6),
 (17, '2019_04_02_044127_add_department_id_to_users', 7),
 (18, '2019_04_05_031657_create_report_metas_table', 8),
-(19, '2019_04_06_171528_create_department_report_table', 9);
+(19, '2019_04_06_171528_create_department_report_table', 9),
+(20, '2019_04_08_101125_add_value_data_to_department_report', 10);
 
 -- --------------------------------------------------------
 
@@ -280,7 +280,7 @@ CREATE TABLE `users` (
 
 INSERT INTO `users` (`id`, `name`, `username`, `password`, `remember_token`, `created_at`, `updated_at`, `department_id`) VALUES
 (2, NULL, 'user1', '$2y$10$7sICmQGsdv2qqzMQN1Yfxu0bHm/uuyRENgyXrY3Tf34wvuZu6bizi', 'MJK3gk8SJsp7QU7aVVF74XBzXJI7YGzKm70t9OqJokUNrQzv1jcM1Zfi62xf', '2019-03-31 08:32:23', '2019-04-05 11:17:49', 1),
-(5, NULL, 'user2', '$2y$10$2RJzb7V3sKnBIeSefI0bOe269zCvfbl4xHZulmWfeu1y5/88h5kMy', NULL, '2019-04-01 21:51:44', '2019-04-07 08:32:41', 9),
+(5, NULL, 'user2', '$2y$10$2RJzb7V3sKnBIeSefI0bOe269zCvfbl4xHZulmWfeu1y5/88h5kMy', NULL, '2019-04-01 21:51:44', '2019-04-08 00:07:42', 9),
 (6, NULL, 'user3', '$2y$10$0oOh4wZ9d8.eG6T1nlKZB.VTiaxCVosj15PSEjSaONTDvbXla0bHy', NULL, '2019-04-01 21:58:05', '2019-04-06 10:02:13', 0);
 
 --
@@ -366,62 +366,51 @@ ALTER TABLE `users`
 --
 ALTER TABLE `admins`
   MODIFY `id` bigint(20) UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=7;
-
 --
 -- AUTO_INCREMENT for table `admin_role`
 --
 ALTER TABLE `admin_role`
   MODIFY `id` bigint(20) UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=6;
-
 --
 -- AUTO_INCREMENT for table `departments`
 --
 ALTER TABLE `departments`
   MODIFY `id` bigint(20) UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=10;
-
 --
 -- AUTO_INCREMENT for table `department_report`
 --
 ALTER TABLE `department_report`
   MODIFY `id` bigint(20) UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=4;
-
 --
 -- AUTO_INCREMENT for table `migrations`
 --
 ALTER TABLE `migrations`
-  MODIFY `id` int(10) UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=20;
-
+  MODIFY `id` int(10) UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=21;
 --
 -- AUTO_INCREMENT for table `reports`
 --
 ALTER TABLE `reports`
   MODIFY `id` bigint(20) UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=3;
-
 --
 -- AUTO_INCREMENT for table `report_metas`
 --
 ALTER TABLE `report_metas`
   MODIFY `id` bigint(20) UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=5;
-
 --
 -- AUTO_INCREMENT for table `report_types`
 --
 ALTER TABLE `report_types`
   MODIFY `id` bigint(20) UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=6;
-
 --
 -- AUTO_INCREMENT for table `roles`
 --
 ALTER TABLE `roles`
   MODIFY `id` bigint(20) UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=5;
-
 --
 -- AUTO_INCREMENT for table `users`
 --
 ALTER TABLE `users`
   MODIFY `id` bigint(20) UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=7;
-COMMIT;
-
 /*!40101 SET CHARACTER_SET_CLIENT=@OLD_CHARACTER_SET_CLIENT */;
 /*!40101 SET CHARACTER_SET_RESULTS=@OLD_CHARACTER_SET_RESULTS */;
 /*!40101 SET COLLATION_CONNECTION=@OLD_COLLATION_CONNECTION */;

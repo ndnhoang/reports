@@ -28,4 +28,19 @@ class HomeController extends Controller
         
         return view('home', ['user' => $user]);
     }
+
+    public function saveReportData(Request $request)
+    {
+        $departments = $request->departments;
+        if ($departments) {
+            foreach ($departments as $department) {
+                $strRequest = 'detail_'.$department;
+                $department_detail = $request->$strRequest;
+                
+            }
+        }
+        
+        return redirect()->back();
+        
+    }
 }
