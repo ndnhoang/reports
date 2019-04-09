@@ -27,7 +27,7 @@
                                     <?php $value_data = $user->department->reports()->where('report_id', $report->id)->first()->pivot->value_data ?>
                                     <?php $value_data = json_decode($value_data) ?> 
                                     <?php $departmentTmp = $user->department->id ?>
-                                    <?php $count_key = count($value_data->$departmentTmp->detail); ?>
+                                    <?php $count_key = $value_data ? count($value_data->$departmentTmp->detail) : 0; ?>
                                     @foreach ($meta_value as $key => $value)
                                         <div class="col-md-4">
                                             <label for="">{{ $value }}</label>
@@ -53,8 +53,8 @@
                         @if ($report_meta_period && $report_meta_period->period_from && $report_meta_last_year)
                             @for ($i = $report_meta_period->period_from; $i <= $report_meta_last_year; $i++)
                                 <?php $year = 'year_'.$i ?>
-                                <?php $count_kh = count($value_data->$departmentTmp->$year->kh) ?>
-                                <?php $count_th = count($value_data->$departmentTmp->$year->th) ?>
+                                <?php $count_kh = $value_data ? count($value_data->$departmentTmp->$year->kh) : 0 ?>
+                                <?php $count_th = $value_data ? count($value_data->$departmentTmp->$year->th) : 0 ?>
                                 <div class="form-group">
                                     <label for=""><strong>Năm {{ $i }} (KH)</strong></label>
                                     <div class="form-row">
@@ -93,15 +93,17 @@
                         @endif
                         @if ($report_meta_period && $report_meta_period->period_to && $report_meta_last_year)
                             @for ($i = $report_meta_last_year + 1; $i <= $report_meta_period->period_to; $i++)
+                                <?php $year = 'year_'.$i ?>
+                                <?php $count_kh = $value_data ? count($value_data->$departmentTmp->$year->kh) : 0 ?>
                                 <div class="form-group">
                                     <label for=""><strong>Kế hoạch {{ $i }}</strong></label>
                                     <div class="form-row">
                                         @if ($meta_value)
-                                            @foreach ($meta_value as $value)
+                                            @foreach ($meta_value as $key => $value)
                                                 <div class="col-md-4">
                                                     <label for="">{{ $value }}</label>
                                                     <div class="input-group">
-                                                        <input class="form-control input-number" type="text" name="KH{{ $i }}_{{ $user->department->id }}[]">
+                                                        <input class="form-control input-number" value="{{ ($key < $count_kh) ? $value_data->$departmentTmp->$year->kh[$key] : '' }}" type="text" name="KH{{ $i }}_{{ $user->department->id }}[]">
                                                         <div class="input-group-append"><span class="input-group-text">triệu đ</span></div>   
                                                         <div class="invalid-feedback">Field is required</div>
                                                     </div>
@@ -117,7 +119,7 @@
                     @if ($department_childs)
                         @foreach ($department_childs as $child)
                             <?php $departmentTmp = $child->id ?>
-                            <?php $count_key = count($value_data->$departmentTmp->detail); ?>
+                            <?php $count_key = $value_data ? count($value_data->$departmentTmp->detail) : 0 ?>
                             <h5 class="card-title"><strong>{{ $child->name }} (tách ra từ "{{ $user->department->name }}")</strong></h5>
                             <input type="hidden" name="departments[]" value="{{ $child->id }}">
                             <div class="card-content mb-5">
@@ -152,8 +154,8 @@
                                 @if ($report_meta_period && $report_meta_period->period_from && $report_meta_last_year)
                                     @for ($i = $report_meta_period->period_from; $i <= $report_meta_last_year; $i++)
                                         <?php $year = 'year_'.$i ?>
-                                        <?php $count_kh = count($value_data->$departmentTmp->$year->kh) ?>
-                                        <?php $count_th = count($value_data->$departmentTmp->$year->th) ?>
+                                        <?php $count_kh = $value_data ? count($value_data->$departmentTmp->$year->kh) : 0 ?>
+                                        <?php $count_th = $value_data ? count($value_data->$departmentTmp->$year->th) : 0 ?>
                                         <div class="form-group">
                                             <label for=""><strong>Năm {{ $i }} (KH)</strong></label>
                                             <div class="form-row">
@@ -192,15 +194,17 @@
                                 @endif
                                 @if ($report_meta_period && $report_meta_period->period_to && $report_meta_last_year)
                                     @for ($i = $report_meta_last_year + 1; $i <= $report_meta_period->period_to; $i++)
+                                        <?php $year = 'year_'.$i ?>
+                                        <?php $count_kh = $value_data ? count($value_data->$departmentTmp->$year->kh) : 0 ?>
                                         <div class="form-group">
                                             <label for=""><strong>Kế hoạch {{ $i }}</strong></label>
                                             <div class="form-row">
                                                 @if ($meta_value)
-                                                    @foreach ($meta_value as $value)
+                                                    @foreach ($meta_value as $key => $value)
                                                         <div class="col-md-4">
                                                             <label for="">{{ $value }}</label>
                                                             <div class="input-group">
-                                                                <input class="form-control input-number" type="text" name="KH{{ $i }}_{{ $child->id }}[]">
+                                                                <input class="form-control input-number" value="{{ ($key < $count_kh) ? $value_data->$departmentTmp->$year->kh[$key] : '' }}" type="text" name="KH{{ $i }}_{{ $child->id }}[]">
                                                                 <div class="input-group-append"><span class="input-group-text">triệu đ</span></div>   
                                                                 <div class="invalid-feedback">Field is required</div>
                                                             </div>

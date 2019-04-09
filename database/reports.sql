@@ -1,15 +1,13 @@
 -- phpMyAdmin SQL Dump
--- version 4.8.3
+-- version 4.6.6deb5
 -- https://www.phpmyadmin.net/
 --
--- Host: 127.0.0.1
--- Generation Time: Apr 08, 2019 at 07:04 PM
--- Server version: 10.1.36-MariaDB
--- PHP Version: 7.2.11
+-- Host: localhost:3306
+-- Generation Time: Apr 09, 2019 at 05:46 PM
+-- Server version: 5.7.22-0ubuntu0.17.10.1
+-- PHP Version: 7.1.17-0ubuntu0.17.10.1
 
 SET SQL_MODE = "NO_AUTO_VALUE_ON_ZERO";
-SET AUTOCOMMIT = 0;
-START TRANSACTION;
 SET time_zone = "+00:00";
 
 
@@ -96,8 +94,7 @@ INSERT INTO `departments` (`id`, `name`, `parent`, `created_at`, `updated_at`) V
 (2, 'Quỹ đầu tư phát triển', 1, '2019-03-29 10:27:51', '2019-03-29 10:28:26'),
 (3, 'Quỹ BLTD cho DNNVV', 1, '2019-03-29 10:27:56', '2019-03-29 10:27:56'),
 (4, 'Quỹ bảo vệ và phát triển rừng', 0, '2019-03-29 10:28:14', '2019-04-01 02:20:03'),
-(8, 'Quỹ phát triển đất', 0, '2019-03-29 10:57:51', '2019-03-31 09:05:11'),
-(9, 'Test', 0, '2019-04-07 08:32:32', '2019-04-07 08:32:32');
+(8, 'Quỹ phát triển đất', 0, '2019-03-29 10:57:51', '2019-03-31 09:05:11');
 
 -- --------------------------------------------------------
 
@@ -120,9 +117,9 @@ CREATE TABLE `department_report` (
 --
 
 INSERT INTO `department_report` (`id`, `department_id`, `report_id`, `value`, `created_at`, `updated_at`, `value_data`) VALUES
-(1, 1, 1, '[\"Cho vay\",\"Doanh thu\",\"Ch\\u00eanh l\\u1ec7ch thu chi tr\\u01b0\\u1edbc thu\\u1ebf\"]', NULL, NULL, '{\"1\":{\"detail\":[null,null,null],\"year_2011\":{\"kh\":[null,null,null],\"th\":[null,null,null]},\"year_2012\":{\"kh\":[null,null,null],\"th\":[null,null,null]},\"year_2013\":{\"kh\":[null,null,null],\"th\":[null,null,null]},\"year_2014\":{\"kh\":[null,null,null],\"th\":[null,null,null]},\"year_2015\":{\"kh\":[null,null,null],\"th\":[null,null,null]},\"year_2016\":{\"kh\":[null,null,null],\"th\":[null,null,null]},\"year_2017\":{\"kh\":[null,null,null],\"th\":[null,null,null]},\"year_2018\":{\"kh\":[null,null,null],\"th\":[null,null,null]}},\"2\":{\"detail\":[null,null,null],\"year_2011\":{\"kh\":[null,null,null],\"th\":[null,null,null]},\"year_2012\":{\"kh\":[null,null,null],\"th\":[null,null,null]},\"year_2013\":{\"kh\":[null,null,null],\"th\":[null,null,null]},\"year_2014\":{\"kh\":[null,null,null],\"th\":[null,null,null]},\"year_2015\":{\"kh\":[null,null,null],\"th\":[null,null,null]},\"year_2016\":{\"kh\":[null,null,null],\"th\":[null,null,null]},\"year_2017\":{\"kh\":[null,null,null],\"th\":[null,null,null]},\"year_2018\":{\"kh\":[null,null,null],\"th\":[null,null,null]}},\"3\":{\"detail\":[null,null,null],\"year_2011\":{\"kh\":[null,null,null],\"th\":[null,null,null]},\"year_2012\":{\"kh\":[null,null,null],\"th\":[null,null,null]},\"year_2013\":{\"kh\":[null,null,null],\"th\":[null,null,null]},\"year_2014\":{\"kh\":[null,null,null],\"th\":[null,null,null]},\"year_2015\":{\"kh\":[null,null,null],\"th\":[null,null,null]},\"year_2016\":{\"kh\":[null,null,null],\"th\":[null,null,null]},\"year_2017\":{\"kh\":[null,null,null],\"th\":[null,null,null]},\"year_2018\":{\"kh\":[null,null,null],\"th\":[null,null,null]}}}'),
-(2, 4, 1, '[\"Thu t\\u1eeb th\\u1ee7y \\u0111i\\u1ec7n\",\"Thu t\\u1eeb Cty CP c\\u1ea5p n\\u01b0\\u1edbc\",\"L\\u00e3i ti\\u1ec1n g\\u1eedi ng\\u00e2n h\\u00e0ng\"]', NULL, NULL, NULL),
-(3, 8, 1, '[\"H\\u1ed7 tr\\u1ee3 t\\u1eeb NS t\\u1ec9nh\",\"Thu s\\u1ef1 nghi\\u1ec7p Qu\\u1ef9\",\"Thu h\\u1ed3i t\\u1ea1m \\u1ee9ng v\\u1ed1n\"]', NULL, NULL, NULL);
+(1, 1, 1, '[\"Cho vay\",\"Doanh thu\",\"Ch\\u00eanh l\\u1ec7ch thu chi tr\\u01b0\\u1edbc thu\\u1ebf\"]', NULL, NULL, '{\"1\":{\"detail\":[null,null,null],\"year_2011\":{\"kh\":[null,null,null],\"th\":[null,null,null]},\"year_2012\":{\"kh\":[null,null,null],\"th\":[null,null,null]},\"year_2013\":{\"kh\":[null,null,null],\"th\":[null,null,null]},\"year_2014\":{\"kh\":[null,null,null],\"th\":[null,null,null]},\"year_2015\":{\"kh\":[null,null,null],\"th\":[null,\"5.284\",\"4.275\"]},\"year_2016\":{\"kh\":[null,\"9.915\",\"6.845\"],\"th\":[\"8.800\",\"10.687\",\"8.201\"]},\"year_2017\":{\"kh\":[null,\"10.726\",\"7.529\"],\"th\":[\"3.577\",\"12.948\",\"10.030\"]},\"year_2018\":{\"kh\":[null,\"14.375\",\"10.696\"],\"th\":[\"12.747\",\"6.623\",\"13.024\"]},\"year_2019\":{\"kh\":[null,null,null]},\"year_2020\":{\"kh\":[null,null,null]}},\"2\":{\"detail\":[null,null,null],\"year_2011\":{\"kh\":[null,null,null],\"th\":[null,null,null]},\"year_2012\":{\"kh\":[null,null,null],\"th\":[null,null,null]},\"year_2013\":{\"kh\":[null,null,null],\"th\":[null,null,null]},\"year_2014\":{\"kh\":[null,null,null],\"th\":[null,null,null]},\"year_2015\":{\"kh\":[null,null,null],\"th\":[null,null,null]},\"year_2016\":{\"kh\":[null,null,null],\"th\":[null,null,null]},\"year_2017\":{\"kh\":[null,null,null],\"th\":[null,null,null]},\"year_2018\":{\"kh\":[null,null,null],\"th\":[null,null,null]},\"year_2019\":{\"kh\":[\"30.000\",\"12.834\",\"8.670\"]},\"year_2020\":{\"kh\":[\"40.000\",\"14.000\",\"9.500\"]}},\"3\":{\"detail\":[null,null,null],\"year_2011\":{\"kh\":[null,null,null],\"th\":[null,null,null]},\"year_2012\":{\"kh\":[null,null,null],\"th\":[null,null,null]},\"year_2013\":{\"kh\":[null,null,null],\"th\":[null,null,null]},\"year_2014\":{\"kh\":[null,null,null],\"th\":[null,null,null]},\"year_2015\":{\"kh\":[null,null,null],\"th\":[null,null,null]},\"year_2016\":{\"kh\":[null,null,null],\"th\":[null,null,null]},\"year_2017\":{\"kh\":[null,null,null],\"th\":[null,null,null]},\"year_2018\":{\"kh\":[null,null,null],\"th\":[null,null,null]},\"year_2019\":{\"kh\":[\"1.000\",\"5.141\",\"4.991\"]},\"year_2020\":{\"kh\":[\"1.500\",\"5.500\",\"5.100\"]}}}'),
+(2, 4, 1, '[\"Thu t\\u1eeb th\\u1ee7y \\u0111i\\u1ec7n\",\"Thu t\\u1eeb Cty CP c\\u1ea5p n\\u01b0\\u1edbc\",\"L\\u00e3i ti\\u1ec1n g\\u1eedi ng\\u00e2n h\\u00e0ng\"]', NULL, NULL, '{\"4\":{\"detail\":[null,null,null],\"year_2011\":{\"kh\":[null,null,null],\"th\":[null,null,null]},\"year_2012\":{\"kh\":[null,null,null],\"th\":[null,null,null]},\"year_2013\":{\"kh\":[\"39.630\",\"3.869\",null],\"th\":[\"7.096\",\"3.511\",\"93\"]},\"year_2014\":{\"kh\":[\"16.197\",\"1.683\",null],\"th\":[\"22.932\",\"1.620\",\"124\"]},\"year_2015\":{\"kh\":[\"22.223\",\"1.751\",null],\"th\":[\"34.054\",\"1.727\",\"374\"]},\"year_2016\":{\"kh\":[\"21.381\",\"1.830\",null],\"th\":[\"17.891\",\"1.821\",\"397\"]},\"year_2017\":{\"kh\":[\"36.612\",\"2.419\",null],\"th\":[\"36.156\",\"2.276\",\"183\"]},\"year_2018\":{\"kh\":[\"18.814\",\"1.896\",null],\"th\":[\"28.763\",\"2.494\",\"101\"]},\"year_2019\":{\"kh\":[\"47.392\",\"2.548\",\"120\"]},\"year_2020\":{\"kh\":[\"49.270\",\"2.600\",\"130\"]}}}'),
+(3, 8, 1, '[\"H\\u1ed7 tr\\u1ee3 t\\u1eeb NS t\\u1ec9nh\",\"Thu s\\u1ef1 nghi\\u1ec7p Qu\\u1ef9\",\"Thu h\\u1ed3i t\\u1ea1m \\u1ee9ng v\\u1ed1n\"]', NULL, NULL, '{\"8\":{\"detail\":[null,null,null],\"year_2011\":{\"kh\":[\"90.000\",\"277\",null],\"th\":[\"90.000\",\"277\",null]},\"year_2012\":{\"kh\":[\"70.000\",\"694\",null],\"th\":[\"70.000\",\"694\",null]},\"year_2013\":{\"kh\":[\"10.000\",\"888\",\"34.000\"],\"th\":[\"10.000\",\"888\",\"2.000\"]},\"year_2014\":{\"kh\":[\"14.375\",\"659\",\"18.140\"],\"th\":[\"14.375\",\"659\",\"50.140\"]},\"year_2015\":{\"kh\":[null,\"577\",\"23.046\"],\"th\":[null,\"577\",\"22.988\"]},\"year_2016\":{\"kh\":[null,\"353\",\"61.617\"],\"th\":[\"10.600\",\"353\",\"33.292\"]},\"year_2017\":{\"kh\":[null,\"305\",\"18.744\"],\"th\":[\"10.125\",\"305\",\"6.500\"]},\"year_2018\":{\"kh\":[null,\"250\",\"37.198\"],\"th\":[null,\"250\",\"29.586\"]},\"year_2019\":{\"kh\":[\"102.715\",\"300\",\"48.125\"]},\"year_2020\":{\"kh\":[\"30.000\",\"300\",\"20.000\"]}}}');
 
 -- --------------------------------------------------------
 
@@ -281,9 +278,9 @@ CREATE TABLE `users` (
 --
 
 INSERT INTO `users` (`id`, `name`, `username`, `password`, `remember_token`, `created_at`, `updated_at`, `department_id`) VALUES
-(2, NULL, 'user1', '$2y$10$7sICmQGsdv2qqzMQN1Yfxu0bHm/uuyRENgyXrY3Tf34wvuZu6bizi', 'MJK3gk8SJsp7QU7aVVF74XBzXJI7YGzKm70t9OqJokUNrQzv1jcM1Zfi62xf', '2019-03-31 08:32:23', '2019-04-05 11:17:49', 1),
-(5, NULL, 'user2', '$2y$10$2RJzb7V3sKnBIeSefI0bOe269zCvfbl4xHZulmWfeu1y5/88h5kMy', NULL, '2019-04-01 21:51:44', '2019-04-08 00:07:42', 9),
-(6, NULL, 'user3', '$2y$10$0oOh4wZ9d8.eG6T1nlKZB.VTiaxCVosj15PSEjSaONTDvbXla0bHy', NULL, '2019-04-01 21:58:05', '2019-04-06 10:02:13', 0);
+(2, NULL, 'user1', '$2y$10$7sICmQGsdv2qqzMQN1Yfxu0bHm/uuyRENgyXrY3Tf34wvuZu6bizi', 'rviVTk0XiMOWfssB0b4bdMV4MG9FEs8xNHGDKSs1oYeWdFOtz2g34XyXeNob', '2019-03-31 08:32:23', '2019-04-05 11:17:49', 1),
+(5, NULL, 'user2', '$2y$10$2RJzb7V3sKnBIeSefI0bOe269zCvfbl4xHZulmWfeu1y5/88h5kMy', NULL, '2019-04-01 21:51:44', '2019-04-08 20:36:56', 4),
+(6, NULL, 'user3', '$2y$10$0oOh4wZ9d8.eG6T1nlKZB.VTiaxCVosj15PSEjSaONTDvbXla0bHy', NULL, '2019-04-01 21:58:05', '2019-04-08 20:37:02', 8);
 
 --
 -- Indexes for dumped tables
@@ -368,62 +365,51 @@ ALTER TABLE `users`
 --
 ALTER TABLE `admins`
   MODIFY `id` bigint(20) UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=7;
-
 --
 -- AUTO_INCREMENT for table `admin_role`
 --
 ALTER TABLE `admin_role`
   MODIFY `id` bigint(20) UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=6;
-
 --
 -- AUTO_INCREMENT for table `departments`
 --
 ALTER TABLE `departments`
   MODIFY `id` bigint(20) UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=10;
-
 --
 -- AUTO_INCREMENT for table `department_report`
 --
 ALTER TABLE `department_report`
   MODIFY `id` bigint(20) UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=6;
-
 --
 -- AUTO_INCREMENT for table `migrations`
 --
 ALTER TABLE `migrations`
   MODIFY `id` int(10) UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=21;
-
 --
 -- AUTO_INCREMENT for table `reports`
 --
 ALTER TABLE `reports`
   MODIFY `id` bigint(20) UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=3;
-
 --
 -- AUTO_INCREMENT for table `report_metas`
 --
 ALTER TABLE `report_metas`
   MODIFY `id` bigint(20) UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=5;
-
 --
 -- AUTO_INCREMENT for table `report_types`
 --
 ALTER TABLE `report_types`
   MODIFY `id` bigint(20) UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=6;
-
 --
 -- AUTO_INCREMENT for table `roles`
 --
 ALTER TABLE `roles`
   MODIFY `id` bigint(20) UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=5;
-
 --
 -- AUTO_INCREMENT for table `users`
 --
 ALTER TABLE `users`
   MODIFY `id` bigint(20) UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=7;
-COMMIT;
-
 /*!40101 SET CHARACTER_SET_CLIENT=@OLD_CHARACTER_SET_CLIENT */;
 /*!40101 SET CHARACTER_SET_RESULTS=@OLD_CHARACTER_SET_RESULTS */;
 /*!40101 SET COLLATION_CONNECTION=@OLD_COLLATION_CONNECTION */;

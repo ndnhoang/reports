@@ -14,6 +14,9 @@ use App\Report;
 use App\ReportMeta;
 use App\Department;
 use DB;
+use PhpOffice\PhpSpreadsheet\Style\NumberFormat;
+use Maatwebsite\Excel\Concerns\WithColumnFormatting;
+use PhpOffice\PhpSpreadsheet\Settings;
 
 
 class ReportsExport implements FromView, WithEvents
@@ -83,7 +86,6 @@ class ReportsExport implements FromView, WithEvents
 
         return [
             BeforeSheet::class => function(BeforeSheet $event) use ($styleArray, $cols, $rows, $rows_title) {
-                
             },
             AfterSheet::class => function(AfterSheet $event) use ($styleArray, $cols, $rows, $rows_title) {
 
@@ -117,6 +119,8 @@ class ReportsExport implements FromView, WithEvents
 
                 $event->sheet->getStyle('A5:'.Coordinate::stringFromColumnIndex($cols).$rows)->getBorders()->getAllBorders()->setBorderStyle(Border::BORDER_THIN);
                 
+                
+                $event->sheet->getStyle('C8:U27')->getNumberFormat()->setFormatCode('#,##0');
             }
         ];
     }
@@ -148,7 +152,7 @@ class ReportsExport implements FromView, WithEvents
             }
         }
 
-        $report_metas = json_decode(json_encode(array('period' => $report_meta_period, 'last_year' => $report_meta_last_year, 'dispatch_date' => $report_meta_dispatch_date, 'departments' => $departments_selected)));
+        $report_metas = json_decode(json_encode(array('period' => $report_meta_period, 'last_year' => $report_meta_last_year, 'dispatch_date' => $report_meta_dispatch_date)));
 
         return view('admin.export.report', compact(['report', 'departments_selected', 'report_metas']));
     }

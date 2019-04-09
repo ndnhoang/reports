@@ -68,6 +68,15 @@ class HomeController extends Controller
                     }
                 }
 
+                if ($report_meta_period && $report_meta_period->period_to && $report_meta_last_year) {
+                    for ($i = $report_meta_last_year + 1; $i <= $report_meta_period->period_to; $i++) {
+                        $strRequest_KH = 'KH'.$i.'_'.$department;
+                        $moneySource_KH = $request->$strRequest_KH;
+                        $moneySource =  array('kh' => $moneySource_KH);
+                        $department_data = array_merge($department_data, array('year_'.$i => $moneySource));
+                    }
+                }
+
                 $value_data[$department] = $department_data;
             }
         }
