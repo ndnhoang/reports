@@ -83,31 +83,50 @@ $totalCols = $valueCols + 3;
         @if ($departments_selected)
             @foreach ($departments_selected as $key => $item)
                 <?php $item = App\Department::find($item) ?>
+                <?php $departmentTmp = $item->id ?>
+                <?php $meta_value = $item->reports()->where('report_id', $report->id)->first()->pivot->value ?>
+                <?php $meta_value = json_decode($meta_value) ?>
+                <?php $value_data = $item->reports()->where('report_id', $report->id)->first()->pivot->value_data ?>
+                <?php $value_data = json_decode($value_data) ?> 
+                <?php $count_key = $value_data ? count($value_data->$departmentTmp->detail) : 0; ?>
                 <tr>
                     <th><?php echo NumConvert::roman($key + 1); ?></th>
                     <th>@uppercase($item->name)</th>
-                    <th></th>
+                    <?php $total_key = 0; ?>
+                    @foreach($meta_value as $index => $value)
+                        <?php $total_key += ($index < $count_key) ? intval(str_replace('.', '', $value_data->$departmentTmp->detail[$index])) : 0; ?>
+                    @endforeach
+                    <th>{{ ($total_key > 0) ? $total_key : '' }}</th>
                     @if ($period_from > 0 && $last_year > 0)
-                        @for ($i = 0; $i < $valueCurrentCols * 2; $i++)
-                            <th></th>
+                        @for ($i = $period_from; $i <= $last_year; $i++)
+                            <?php $total_kh = 0; ?>
+                            <?php $total_th = 0; ?>
+                            @foreach($meta_value as $index => $value)
+                                <?php $year = 'year_'.$i ?>
+                                <?php $count_kh = $value_data ? count($value_data->$departmentTmp->$year->kh) : 0 ?>
+                                <?php $count_th = $value_data ? count($value_data->$departmentTmp->$year->th) : 0 ?>
+                                <?php $total_kh += ($index < $count_kh) ? intval(str_replace('.', '', $value_data->$departmentTmp->$year->kh[$index])) : 0; ?>
+                                <?php $total_th += ($index < $count_th) ? intval(str_replace('.', '', $value_data->$departmentTmp->$year->th[$index])) : 0; ?>
+                            @endforeach
+                            <th>{{ ($total_kh > 0) ? $total_kh : '' }}</th>
+                            <th>{{ ($total_th > 0) ? $total_th : '' }}</th>
                         @endfor
-                        @for ($i = 0; $i < $valueFutureCols; $i++)
-                            <th></th>
+                        @for ($i = $last_year + 1; $i <= $period_to; $i++)
+                            <?php $total_kh = 0; ?>
+                            @foreach($meta_value as $index => $value)
+                                <?php $year = 'year_'.$i ?>
+                                <?php $count_kh = $value_data ? count($value_data->$departmentTmp->$year->kh) : 0 ?>
+                                <?php $total_kh += ($index < $count_kh) ? intval(str_replace('.', '', $value_data->$departmentTmp->$year->kh[$index])) : 0; ?>
+                            @endforeach
+                            <th>{{ ($total_kh > 0) ? $total_kh : '' }}</th>
                         @endfor
                     @endif
                 </tr>
-                <?php $meta_value = $item->reports()->where('report_id', $report->id)->first()->pivot->value ?>
                 @if ($meta_value)
-                    <?php $meta_value = json_decode($meta_value) ?>
-
                     @foreach($meta_value as $index => $value)
                         <tr>
                             <td>{{ $index + 1 }}</td>
                             <td>{{ $value }}</td>
-                            <?php $value_data = $item->reports()->where('report_id', $report->id)->first()->pivot->value_data ?>
-                            <?php $value_data = json_decode($value_data) ?> 
-                            <?php $departmentTmp = $item->id ?>
-                            <?php $count_key = $value_data ? count($value_data->$departmentTmp->detail) : 0; ?>
                             <td>{{ ($index < $count_key) ? str_replace('.', '', $value_data->$departmentTmp->detail[$index]) : '' }}</td>
                             @for ($i = $period_from; $i <= $last_year; $i++)
                                 <?php $year = 'year_'.$i ?>
@@ -127,16 +146,38 @@ $totalCols = $valueCols + 3;
                 <?php $departmentChilds = App\Department::where('parent', $item->id)->get(); ?>
                 @if ($departmentChilds)
                     @foreach ($departmentChilds as $key_child => $child)
+                        <?php $departmentTmp = $child->id ?>
+                        <?php $count_key = $value_data ? count($value_data->$departmentTmp->detail) : 0; ?>
                         <tr>
                             <th><?php echo NumConvert::roman($key + 1); ?>.{{ $key_child + 1 }}</th>
                             <th>{{ $child->name }} (tách ra từ <?php echo NumConvert::roman($key + 1); ?>)</th>
-                            <th></th>
-                            @if ($period_from && $last_year)
-                                @for ($i = 0; $i < $valueCurrentCols * 2; $i++)
-                                    <th></th>
+                            <?php $total_key = 0; ?>
+                            @foreach($meta_value as $index => $value)
+                                <?php $total_key += ($index < $count_key) ? intval(str_replace('.', '', $value_data->$departmentTmp->detail[$index])) : 0; ?>
+                            @endforeach
+                            <th>{{ ($total_key > 0) ? $total_key : '' }}</th>
+                            @if ($period_from > 0 && $last_year > 0)
+                                @for ($i = $period_from; $i <= $last_year; $i++)
+                                    <?php $total_kh = 0; ?>
+                                    <?php $total_th = 0; ?>
+                                    @foreach($meta_value as $index => $value)
+                                        <?php $year = 'year_'.$i ?>
+                                        <?php $count_kh = $value_data ? count($value_data->$departmentTmp->$year->kh) : 0 ?>
+                                        <?php $count_th = $value_data ? count($value_data->$departmentTmp->$year->th) : 0 ?>
+                                        <?php $total_kh += ($index < $count_kh) ? intval(str_replace('.', '', $value_data->$departmentTmp->$year->kh[$index])) : 0; ?>
+                                        <?php $total_th += ($index < $count_th) ? intval(str_replace('.', '', $value_data->$departmentTmp->$year->th[$index])) : 0; ?>
+                                    @endforeach
+                                    <th>{{ ($total_kh > 0) ? $total_kh : '' }}</th>
+                                    <th>{{ ($total_th > 0) ? $total_th : '' }}</th>
                                 @endfor
-                                @for ($i = 0; $i < $valueFutureCols; $i++)
-                                    <th></th>
+                                @for ($i = $last_year + 1; $i <= $period_to; $i++)
+                                    <?php $total_kh = 0; ?>
+                                    @foreach($meta_value as $index => $value)
+                                        <?php $year = 'year_'.$i ?>
+                                        <?php $count_kh = $value_data ? count($value_data->$departmentTmp->$year->kh) : 0 ?>
+                                        <?php $total_kh += ($index < $count_kh) ? intval(str_replace('.', '', $value_data->$departmentTmp->$year->kh[$index])) : 0; ?>
+                                    @endforeach
+                                    <th>{{ ($total_kh > 0) ? $total_kh : '' }}</th>
                                 @endfor
                             @endif
                         </tr>
@@ -145,7 +186,6 @@ $totalCols = $valueCols + 3;
                                 <tr>
                                     <td>{{ $index + 1 }}</td>
                                     <td>{{ $value }}</td>
-                                    <?php $departmentTmp = $child->id ?>
                                     <?php $count_key = $value_data ? count($value_data->$departmentTmp->detail) : 0; ?>
                                     <td>{{ ($index < $count_key) ? str_replace('.', '', $value_data->$departmentTmp->detail[$index]) : '' }}</td>
                                     @for ($i = $period_from; $i <= $last_year; $i++)

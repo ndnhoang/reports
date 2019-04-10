@@ -220,9 +220,7 @@ class ReportController extends Controller
 
     public function export($id)
     {
-        Excel::store(new ReportsExport($id), 'report.xlsx');
-        
-        return redirect()->back();
+        return Excel::download(new ReportsExport($id), 'report.xlsx');
         
     }
 

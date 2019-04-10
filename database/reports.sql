@@ -3,7 +3,7 @@
 -- https://www.phpmyadmin.net/
 --
 -- Host: localhost:3306
--- Generation Time: Apr 09, 2019 at 05:46 PM
+-- Generation Time: Apr 10, 2019 at 02:01 PM
 -- Server version: 5.7.22-0ubuntu0.17.10.1
 -- PHP Version: 7.1.17-0ubuntu0.17.10.1
 
@@ -278,7 +278,7 @@ CREATE TABLE `users` (
 --
 
 INSERT INTO `users` (`id`, `name`, `username`, `password`, `remember_token`, `created_at`, `updated_at`, `department_id`) VALUES
-(2, NULL, 'user1', '$2y$10$7sICmQGsdv2qqzMQN1Yfxu0bHm/uuyRENgyXrY3Tf34wvuZu6bizi', 'rviVTk0XiMOWfssB0b4bdMV4MG9FEs8xNHGDKSs1oYeWdFOtz2g34XyXeNob', '2019-03-31 08:32:23', '2019-04-05 11:17:49', 1),
+(2, NULL, 'user1', '$2y$10$7sICmQGsdv2qqzMQN1Yfxu0bHm/uuyRENgyXrY3Tf34wvuZu6bizi', 'oEdhAM6zeAHQMYky2bpitUZIekwkh7PtKM9jKsBkaF0gKfmqwQVD99o6b3Z0', '2019-03-31 08:32:23', '2019-04-05 11:17:49', 1),
 (5, NULL, 'user2', '$2y$10$2RJzb7V3sKnBIeSefI0bOe269zCvfbl4xHZulmWfeu1y5/88h5kMy', NULL, '2019-04-01 21:51:44', '2019-04-08 20:36:56', 4),
 (6, NULL, 'user3', '$2y$10$0oOh4wZ9d8.eG6T1nlKZB.VTiaxCVosj15PSEjSaONTDvbXla0bHy', NULL, '2019-04-01 21:58:05', '2019-04-08 20:37:02', 8);
 
@@ -340,7 +340,8 @@ ALTER TABLE `report_metas`
 -- Indexes for table `report_types`
 --
 ALTER TABLE `report_types`
-  ADD PRIMARY KEY (`id`);
+  ADD PRIMARY KEY (`id`),
+  ADD UNIQUE KEY `name` (`name`);
 
 --
 -- Indexes for table `roles`
